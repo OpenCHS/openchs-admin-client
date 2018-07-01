@@ -1,0 +1,5 @@
+.background {
+  background-image: url(styles/images/background.jpg);
+  background-position: top;
+  color: white !important;
+}
