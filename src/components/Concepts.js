@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import NewConceptModal, { NewConceptButton } from "./NewConceptModal";
+import { Link } from 'react-router-dom';
+import FindConcept from './FindConcept';
 
-class Concepts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [], loading: true };
-  }
+const Concepts = () =>
+  <React.Fragment>
+    <div className="row">
+      <div className="col">
+        <nav className="navbar float-left">
+          <Link to="/concepts/addConcept">
+            Add Concept
+        </Link>
+        </nav>
 
-  render() {
-    return (
-      <div>
-        <NewConceptButton />
-        <NewConceptModal {...this.props} />
       </div>
-    )
-  }
-}
-
+    </div>
+    <div className="row">
+      <div className="col">
+        <FindConcept />
+      </div>
+    </div>
+  </React.Fragment>
 export default Concepts;

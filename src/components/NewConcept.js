@@ -1,0 +1,221 @@
+import React from 'react';
+import { Label, Form, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import Autosuggest from 'react-autosuggest';
+
+import SearchAnswersModal from './SearchAnswersModal';
+
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.name;
+}
+
+function renderSuggestion(suggestion) {
+  return (
+    <span>{suggestion.name}</span>
+  );
+}
+
+
+class NewConcept extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      dataType: 'Coded',
+      tags: [],
+      autoSuggestValue: '',
+      suggestions: [],
+      selectedAnswers: [],
+      showSearchModal: false,
+      modal: false,
+      selectedSuggestion: null
+    };
+    this.onChangeField = this.onChangeField.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  onSuggestionSelected = (event, { suggestion }) => {
+    this.setState(prevState => ({
+      selectedSuggestion: suggestion
+    }));
+  };
+
+  onAddSuggestion = (event) => {
+    if(this.state.selectedSuggestion != null) {
+      this.setState(prevState => ({
+        selectedAnswers: [...prevState.selectedAnswers, prevState.selectedSuggestion],
+        autoSuggestValue: '',
+        selectedSuggestion: null,
+        modal: false
+      }));
+    }
+  }
+
+  onAutoSuggestChange = (event, { newValue, method }) => {
+    this.setState({
+      autoSuggestValue: newValue
+    });
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": "OpenCHS" } })
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(conceptAnswers =>
+        this.setState(prevState => (
+          {
+            suggestions: conceptAnswers
+          }
+        )))
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  componentDidMount() {
+  }
+
+  onChangeField(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleSubmit(event) {
+    //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
+    alert(JSON.stringify(this.state));
+    event.preventDefault();
+  }
+
+  handleChange(tags) {
+    this.setState({ tags })
+  }
+
+  render() {
+    let smShow = () => this.setState({ showSearchModal: true });
+    let smClose = () => this.setState({ showSearchModal: false });
+
+    const { autoSuggestValue, suggestions, selectedAnswers } = this.state;
+    const inputProps = {
+      value: autoSuggestValue,
+      onChange: this.onAutoSuggestChange
+    };
+    const optionItems = selectedAnswers.map((sA) =>
+      <option key={sA.uuid} value={sA.uuid}>{sA.name}</option>
+    );    
+
+    return (
+      <div>
+        <Container>
+          <Row>
+            <Col sm={8}>
+              <form onSubmit={this.handleSubmit}>
+                <div className="modal-body">
+                  <div className="form-group has-danger">
+                    <label htmlFor="name">Name</label>
+                    <input type="text"
+                      className="form-control form-control-danger"
+                      id="name"
+                      value={this.state.name}
+                      name="name"
+                      placeholder="Enter concept name"
+                      onChange={this.onChangeField}
+                      required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="dataType">Concept Type</label>
+                    <select
+                      className="form-control"
+                      id="dataType"
+                      value={this.state.dataType}
+                      name="dataType"
+                      onChange={this.onChangeField}>
+                      <option>NA</option>
+                      <option>Numeric</option>
+                      <option>Text</option>
+                      <option>Coded</option>
+                      <option>Date</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="selectedAnswers">Selected Answers</label>
+                    <div className="form-row">
+                      <div className="col-10">
+                        <select
+                          className="form-control"
+                          id="selectedAnswers"
+                          multiple={true}
+                          name="selectedAnswers">
+                          {optionItems}
+                        </select>
+                      </div>
+                      <div className="col-1">
+                        <Button onClick={this.toggle} color="secondary">Add</Button>
+                        <Button color="secondary">Remove</Button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <div className="modal-footer">
+                  <input
+                    className="btn btn-primary btn-block"
+                    type="submit"
+                    value="Create">
+                  </input>
+                </div>
+              </form>
+              <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                    <ModalHeader toggle={this.toggle}>Choose an answer</ModalHeader>
+                    <ModalBody>
+                      <form onSubmit={(e) => e.preventDefault()}>
+                        <FormGroup>
+                          <Label for="findConcept">Find Concept</Label>
+                          <Autosuggest
+                            id="findConcept"
+                            suggestions={suggestions}
+                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                            onSuggestionSelected={this.onSuggestionSelected}
+                            getSuggestionValue={getSuggestionValue}
+                            renderSuggestion={renderSuggestion}
+                            inputProps={inputProps} />
+                        </FormGroup>
+                      </form>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" onClick={this.onAddSuggestion}>Add</Button>{' '}
+                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                  </Modal>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default NewConcept;
