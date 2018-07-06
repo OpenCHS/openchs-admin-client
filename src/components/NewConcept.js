@@ -168,10 +168,10 @@ class NewConcept extends React.Component {
                     name="dataType"
                     onChange={this.onChangeField}>
                     <option>NA</option>
-                    <option>Numeric</option>
-                    <option>Text</option>
+                    {/* <option>Numeric</option>
+                    <option>Text</option> */}
                     <option>Coded</option>
-                    <option>Date</option>
+                    {/* <option>Date</option> */}
                   </select>
                 </div>
                 {this.state.dataType === 'Coded' &&
