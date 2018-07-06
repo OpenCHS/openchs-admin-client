@@ -19,9 +19,6 @@ export const FieldIcon = (props) => {
 };
 
 class FieldsPanel extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     static addFieldsRow(fields, groupId, rowNum) {
         return (

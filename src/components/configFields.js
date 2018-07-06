@@ -3,7 +3,6 @@ import TextComponent from "./TextComponent";
 import DateComponent from "./DateComponent";
 import MultiCodedComponent from "./MultiCodedComponent";
 import SingleCodedComponent from "./SingleCodedComponent";
-import BooleanComponent from "./BooleanComponent";
 import NumericComponent from "./NumericComponent";
 
 const fieldsMetadata = [{

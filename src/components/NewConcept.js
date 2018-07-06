@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label, Form, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Autosuggest from 'react-autosuggest';
 import uuidv4 from 'uuid/v4';
 
@@ -106,12 +106,25 @@ class NewConcept extends React.Component {
     let concept = { "uuid": uuidv4() };
     concept["name"] = this.state.name;
     concept["dataType"] = this.state.dataType;
-    concept["answers"] = this.state.selectedAnswers.map(sA => ({uuid:sA.uuid, name: sA.name}));
+    concept["answers"] = this.state.selectedAnswers.map(sA => ({ uuid: sA.uuid, name: sA.name }));
     const concepts = [concept];
 
     //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
     alert(JSON.stringify(concepts));
-    
+
+    fetch('/concepts', {
+      method: 'POST',
+      body: JSON.stringify(concepts),
+      headers: {
+        'Content-Type': 'application/json',
+        'ORGANISATION-NAME': 'OpenCHS'
+      }
+    }).then(handleErrors)
+      .then(response => alert('Concept Created'))
+      .catch(err => {
+        alert(err)
+      });
+
     event.preventDefault();
   }
 
@@ -120,9 +133,6 @@ class NewConcept extends React.Component {
   }
 
   render() {
-    let smShow = () => this.setState({ showSearchModal: true });
-    let smClose = () => this.setState({ showSearchModal: false });
-
     const { autoSuggestValue, suggestions, selectedAnswers } = this.state;
     const inputProps = {
       value: autoSuggestValue,
@@ -189,27 +199,27 @@ class NewConcept extends React.Component {
                     <div className="form-group col-md-2">
                       <label htmlFor="lowAbsolute">Low Absolute</label>
                       <input type="text" className="form-control" id="lowAbsolute"
-                         />
+                      />
                     </div>
                     <div className="form-group col-md-2">
                       <label htmlFor="highAbsolute">High Absolute</label>
                       <input type="text" className="form-control" id="highAbsolute"
-                         />
+                      />
                     </div>
                     <div className="form-group col-md-2">
                       <label htmlFor="lowNormal">Low Normal</label>
                       <input type="text" className="form-control" id="lowNormal"
-                         />
+                      />
                     </div>
                     <div className="form-group col-md-2">
                       <label htmlFor="highNormal">High Normal</label>
                       <input type="text" className="form-control" id="highNormal"
-                         />
+                      />
                     </div>
                     <div className="form-group col-md-4">
                       <label htmlFor="unit">Unit</label>
                       <select id="unit" className="form-control"
-                        >
+                      >
                         <option defaultValue="">Choose...</option>
                         <option>cm</option>
                         <option>kg</option>

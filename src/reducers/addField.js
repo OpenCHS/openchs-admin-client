@@ -1,5 +1,5 @@
 import {
-    ADD_FIELD, UPDATE_FIELD, ADD_GROUP, UPDATE_GROUP, LOAD_GROUPS, INIT_GROUPS,
+    ADD_FIELD, UPDATE_FIELD, ADD_GROUP, UPDATE_GROUP, INIT_GROUPS,
     UPDATE_TEXT_FIELD, UPDATE_CODED_FIELD, UPDATE_NUMERIC_FIELD
 } from "../actions/fields";
 import _ from 'lodash';
@@ -88,5 +88,3 @@ export default function addField(formGroups = [], action) {
             return formGroups;
     }
 }
-
-const name = (fields, field) => (field.icon + (fields.length === 0 ? 1 : fields.length + 1));
