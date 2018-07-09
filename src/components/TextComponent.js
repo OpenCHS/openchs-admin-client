@@ -69,7 +69,8 @@ TextComponent.propTypes = {
     groupId: PropTypes.string.isRequired,
     field: PropTypes.object,
     fieldMetadata: PropTypes.object,
-    collapse: PropTypes.string
+    collapse: PropTypes.string,
+    readonly: PropTypes.bool
 };
 
 export default connect((state) => {

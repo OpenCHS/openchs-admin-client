@@ -72,7 +72,8 @@ class FormGroup extends Component {
                 const collapseClass = this.props.collapse === true ? collapse :
                     (this.props.fields.length === i ? collapse + " show" : collapse);
                 inputField.id = fieldId;
-                const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass);
+                const readonly = true;
+                const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly);
 
                 console.log(fieldId + " cmp: " + fieldComponent);
                 inputFields.push(

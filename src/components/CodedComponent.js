@@ -50,6 +50,9 @@ class CodedComponent extends Component {
         const tagsFieldId = this.props.field.id + "_tags";
         const mandatoryFieldId = this.props.field.id + "_mandatory";
         const tags = _.map(this.state.answers, (answer)=>(answer.name));
+        const readOnly = this.props.readOnly;
+        const tagsFieldLabel = readOnly ? "Answers" : "Type your choices. Press enter after each choice.";
+
         return (
             <div className="card">
                 <div className="card-header py-2" id={headerId}>
@@ -63,7 +66,7 @@ class CodedComponent extends Component {
                     <div className="card-body">
                         <div className="form-row">
                             <div className="form-group col-md-10">
-                                <input type="text" className="form-control" id={this.props.field.id}
+                                <input readOnly={readOnly} type="text" className="form-control" id={this.props.field.id}
                                        placeholder="Question Title" onChange={this.onChangeFieldName.bind(this)}
                                        defaultValue={this.props.field.name}/>
                             </div>
@@ -73,9 +76,9 @@ class CodedComponent extends Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor={tagsFieldId}>Type your choices. Press enter after each choice.</label>
+                            <label htmlFor={tagsFieldId}>{tagsFieldLabel}</label>
                             <TagsInput value={tags} onChange={this.onChangeAnswers.bind(this)}
-                                       id={tagsFieldId} inputProps={{placeholder: "Answer"}}/>
+                                       id={tagsFieldId} inputProps={{placeholder: "Answer", readOnly: readOnly}}/>
                         </div>
                         <div className="form-group">
                             <div className="form-check">
