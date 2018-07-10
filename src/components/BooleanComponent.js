@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {FieldIcon} from "./FieldList";
-import {updateField} from "../actions/fields";
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
 
 class BooleanComponent extends Component {
     constructor(props) {
@@ -96,7 +94,3 @@ BooleanComponent.propTypes = {
     fieldMetadata: PropTypes.object,
     collapse: PropTypes.string
 };
-
-export default connect((state) => {
-    return {dataType: 'Boolean'};
-}, {updateField})(BooleanComponent);

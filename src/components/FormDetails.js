@@ -64,9 +64,12 @@ class FormDetails extends Component {
                 if (response.status >= 200 && response.status < 300) {
                     return response.json();
                 }
+                
                 const error = new Error(response.statusText);
                 error.response = response;
-                throw error;
+                console.log(error);
+                alert(error);
+                //throw error;
             });
     }
 
@@ -148,7 +151,7 @@ class FormDetails extends Component {
     }
 
     render() {
-        console.log("render form details");
+        // console.log("render form details");
         return (
             <div className="row">
                 {this.renderForm()}

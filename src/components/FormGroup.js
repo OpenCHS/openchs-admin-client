@@ -75,7 +75,7 @@ class FormGroup extends Component {
                 const readonly = true;
                 const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly);
 
-                console.log(fieldId + " cmp: " + fieldComponent);
+                //console.log(fieldId + " cmp: " + fieldComponent);
                 inputFields.push(
                     <div className="row" key={fieldId}>
                         <div className="col-12">

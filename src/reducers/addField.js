@@ -18,7 +18,7 @@ export default function addField(formGroups = [], action) {
         return formGroup.groupId === groupId;
     });
     if (!formGroup) {
-        console.log("no form group found for " + groupId);
+        //console.log("no form group found for " + groupId);
     }
     let fieldIndex;
     let fieldElement;

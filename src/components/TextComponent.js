@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {FieldIcon} from "./FieldList";
-import {updateTextField} from "../actions/fields";
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
 
 class TextComponent extends Component {
     constructor(props) {
@@ -73,6 +71,4 @@ TextComponent.propTypes = {
     readonly: PropTypes.bool
 };
 
-export default connect((state) => {
-    return {};
-}, {updateTextField})(TextComponent);
+export default TextComponent;

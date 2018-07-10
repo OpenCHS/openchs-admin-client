@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {FieldIcon} from "./FieldList";
-import {updateNumericField} from "../actions/fields";
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
 
 class NumericComponent extends Component{
     constructor(props) {
@@ -110,6 +108,4 @@ NumericComponent.propTypes = {
     collapse: PropTypes.string
 };
 
-export default connect((state) => {
-    return {};
-}, {updateNumericField})(NumericComponent);
+export default NumericComponent;
