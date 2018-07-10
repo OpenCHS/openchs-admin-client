@@ -90,9 +90,6 @@ class NewConcept extends React.Component {
     });
   }
 
-  componentDidMount() {
-  }
-
   onChangeField(event) {
     const name = event.target.name;
     const value = event.target.value;
