@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import updateBasicForm, {fetchGroups} from "../actions/form";
 import {connect} from "react-redux";
-import {Link} from 'react-router-dom';
 
 class FormCard extends Component {
 
@@ -23,8 +22,7 @@ class FormCard extends Component {
             <div className="card h-100">
                 <div className="card-body">
                     <h4 className="card-title">
-                        {/* <a href="#" onClick={openFormPage}>{form.name}</a> */}
-                        <Link to={`/forms/${form.uuid}`}>{form.name}</Link>
+                        <a href="#" onClick={openFormPage}>{form.name}</a>
                     </h4>
                     <h5>{form.formType}</h5>
                     <a href="#" className="btn btn-primary" onClick={openFormPage}>Open</a>

@@ -27,13 +27,7 @@ class FormDetails extends Component {
   }
 
   componentDidMount() {
-    // fetch(`/forms/concept?name=${event.target.value}`, { headers: { "ORGANISATION-NAME": "OpenCHS" } })
-    // .then(handleErrors)
-    // .then(response => response.json())
-    // .then(concepts => this.setState({ searchResults: concepts }))
-    // .catch(err => {
-    //   console.log(err);
-    // });
+
   }
 
   renderForm() {
@@ -164,11 +158,10 @@ class FormDetails extends Component {
     // console.log("render form details");
     return (
       <div className="row">
-        <h4>{this.props.match.params.formUuid}</h4>
-        {/* {this.renderForm()}
+        {this.renderForm()}
         <div className="col-3">
           <UpdateForm />
-        </div> */}
+        </div>
       </div>
     );
   }
