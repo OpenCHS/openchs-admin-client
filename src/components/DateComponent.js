@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FieldIcon } from "./FieldList";
+import { updateField } from "../actions/fields";
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import _ from "lodash";
 import ChooseConcept from './ChooseConcept';
 
@@ -149,4 +151,6 @@ DateComponent.propTypes = {
   collapse: PropTypes.string
 };
 
-export default DateComponent
+export default connect((state) => {
+  return { dataType: 'Date' };
+}, { updateField })(DateComponent);

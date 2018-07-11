@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {FieldIcon} from "./FieldList";
+import {updateCodedField} from "../actions/fields";
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import _ from 'lodash';
@@ -101,4 +103,5 @@ CodedComponent.propTypes = {
     collapse: PropTypes.string
 };
 
-export default CodedComponent;
+export default connect((state) => { return {}
+}, {updateCodedField})(CodedComponent);
