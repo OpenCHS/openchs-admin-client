@@ -41,9 +41,7 @@ class NewConcept extends React.Component {
   }
 
   onSuggestionSelected = (event, { suggestion }) => {
-    this.setState(prevState => ({
-      selectedSuggestion: suggestion
-    }));
+    this.setState({ selectedSuggestion: suggestion });
   };
 
   onAddSuggestion = (event) => {
@@ -58,9 +56,7 @@ class NewConcept extends React.Component {
   }
 
   onAutoSuggestChange = (event, { newValue, method }) => {
-    this.setState({
-      autoSuggestValue: newValue
-    });
+    this.setState({ autoSuggestValue: newValue });
   };
 
   onSuggestionsFetchRequested = ({ value }) => {

@@ -4,7 +4,6 @@ import { updateField } from "../actions/fields";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import _ from "lodash";
-import ChooseConcept from './ChooseConcept';
 
 const dateSubFields = [
   { id: "days_cb", value: "days", label: "Days" },
@@ -109,7 +108,7 @@ class DateComponent extends Component {
         <div className="card-header py-2" id={headerId}>
           <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
             aria-controls={collapseId}>
-            {this.state.fieldHeader} thiz iz a haadar
+            {this.state.fieldHeader}
           </a>
         </div>
         <div id={collapseId} className={this.props.collapse} aria-labelledby={headerId}
@@ -126,7 +125,6 @@ class DateComponent extends Component {
                   fieldMetadata={this.props.fieldMetadata} />{" " + this.props.fieldMetadata.label}
               </div>
             </div>
-            <ChooseConcept></ChooseConcept>
             {this.renderDateSubFields()}
             <div className="form-group">
               <div className="form-check">

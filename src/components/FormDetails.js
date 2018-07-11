@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import FormGroup from "./FormGroup";
-import UpdateForm from "./UpdateForm";
-import FieldList from "./FieldList";
 import {connect} from "react-redux";
-import addField, {addGroup} from "../actions/fields";
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-class FormDetails extends Component {
+import FormGroup from "./FormGroup";
+import UpdateForm from "./UpdateForm";
+import FieldList from "./FieldList";
 
+import addField, {addGroup} from "../actions/fields";
+import updateBasicForm, {fetchGroups} from "../actions/form";
+
+class FormDetails extends Component {
     constructor(props) {
         super(props);
         if (this.props.formGroups.length === 0) {
@@ -24,6 +26,14 @@ class FormDetails extends Component {
 
         this.onSelectField = this.onSelectField.bind(this);
         this.addGroupField = this.addGroupField.bind(this);
+    }
+
+    componentDidMount() {
+      const emptyCallback = () => { };
+      
+      //debugger;
+      // this.props.updateBasicForm(form.name, form.formType, form.programName, form.encounterTypes);
+      this.props.fetchGroups(this.props.form.name, this.props.match.params.formUUID, emptyCallback);
     }
 
     renderForm() {
@@ -176,4 +186,4 @@ function createGroup(id) {
 
 export default connect((state) => {
     return {form: state.currentForm, formGroups: state.formElementGroups}
-}, {addField, addGroup})(FormDetails);
+}, {updateBasicForm, fetchGroups, addField, addGroup})(FormDetails);

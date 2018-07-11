@@ -40,6 +40,6 @@ export default function Routes(props) {
         <Route exact path="/concepts" component={ConceptsList}/>
         <Route path="/concepts/addConcept" component={AddConcept}/>
         <Route path="/concepts/:conceptId" component={ViewConcept}/>
-        <Route path="/forms/addFields" component={AddFields}/>
+        <Route path="/forms/:formUUID" component={AddFields}/>
     </Switch>
 };
