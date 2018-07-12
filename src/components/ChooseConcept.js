@@ -1,5 +1,7 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
+import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+
 import handleErrors from '../lib/handleErrors';
 
 export default class ChooseConcept extends React.Component {
@@ -8,6 +10,7 @@ export default class ChooseConcept extends React.Component {
     super(props);
     this.state = {
       suggestions: [],
+      modal: false,
       autoSuggestValue: props.value
     };
   }
@@ -33,8 +36,19 @@ export default class ChooseConcept extends React.Component {
   };
 
   onSuggestionSelected = (event, { suggestion }) => {
+    this.setState({
+      autoSuggestValue: '',
+      modal: false
+    });
+
     this.props.onConceptSelected(suggestion);
   };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
 
   render() {
     const inputProps = {
@@ -42,16 +56,40 @@ export default class ChooseConcept extends React.Component {
       onChange: this.onAutoSuggestChange
     };
 
+    // return (
+    //   <Autosuggest
+    //     id={this.props.id}
+    //     suggestions={this.state.suggestions}
+    //     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+    //     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+    //     onSuggestionSelected={this.onSuggestionSelected}
+    //     getSuggestionValue={(concept) => concept.name}
+    //     renderSuggestion={(concept) => <span>{concept.name}</span>}
+    //     inputProps={inputProps} />
+    // );
     return (
-      <Autosuggest
-        id={this.props.id}
-        suggestions={this.state.suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        onSuggestionSelected={this.onSuggestionSelected}
-        getSuggestionValue={(concept) => concept.name}
-        renderSuggestion={(concept) => <span>{concept.name}</span>}
-        inputProps={inputProps} />
+      <div>
+        <a href="#" className="text-danger" onClick={this.toggle}>{this.props.linkText}</a>
+        <Modal centered isOpen={this.state.modal} toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle}>{this.props.modalHeader}</ModalHeader>
+          <ModalBody>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <FormGroup>
+                <Label for="findConcept">Find Concept</Label>
+                <Autosuggest
+                  id={this.props.id}
+                  suggestions={this.state.suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  onSuggestionSelected={this.onSuggestionSelected}
+                  getSuggestionValue={(concept) => concept.name}
+                  renderSuggestion={(concept) => <span>{concept.name}</span>}
+                  inputProps={inputProps} />
+              </FormGroup>
+            </form>
+          </ModalBody>
+        </Modal>
+      </div>
     );
   }
 }

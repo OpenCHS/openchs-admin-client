@@ -61,45 +61,47 @@ class NumericComponent extends Component {
         <div id={collapseId} className={this.props.collapse} aria-labelledby={headerId}
           data-parent="#accordion">
           <div className="card-body">
-            <Card className="mb-2">
-              <CardHeader>Form Element</CardHeader>
-              <CardBody>
-                <div className="form-row">
-                  <div className="form-group col-md-10">
-                    <input type="text" className="form-control" id={this.props.field.id}
-                      placeholder="Question Title"
-                      value={this.props.field.name} />
-                  </div>
-                  <div className="form-group col-md-2">
-                    <FieldIcon
-                      fieldMetadata={this.props.fieldMetadata} />
-                    {" " + this.props.fieldMetadata.label}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <div className="form-check">
-                    <label className="form-check-label">
-                      <input className="form-check-input" type="checkbox" id={mandatoryFieldId}
-                        onChange={this.onChangeMandatory.bind(this)}
-                        checked={this.state.mandatory} />
-                      Required
-                  </label>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
+            <div className="form-group">
+              <ChooseConcept
+                id="chooseConcept"
+                value={this.state.concept.name}
+                linkText="Choose a different concept"
+                modalHeader="Choose a Concept"
+                onConceptSelected={this.onConceptSelected} />
+            </div>
 
-            <Card>
-              <CardHeader>Concept</CardHeader>
-              <CardBody>
-                <div className="form-group">
-                  <label htmlFor="chooseConcept">Concept</label>
-                  <ChooseConcept id="chooseConcept" value={this.state.concept.name} onConceptSelected={this.onConceptSelected} />
-                </div>
-                <NumericConcept concept={this.state.concept} />
-              </CardBody>
-            </Card>
-            
+            <div className="form-row">
+              <div className="form-group col-md-10">
+                <input type="text" className="form-control" id={this.props.field.id}
+                  placeholder="Question Title"
+                  value={this.props.field.name} />
+              </div>
+              <div className="form-group col-md-2">
+                <FieldIcon
+                  fieldMetadata={this.props.fieldMetadata} />
+                {" " + this.props.fieldMetadata.label}
+              </div>
+            </div>
+
+
+
+            <NumericConcept readOnly={true} concept={this.state.concept} />
+
+            <div className="form-group">
+              <div className="form-check">
+                <label className="form-check-label">
+                  <input className="form-check-input" type="checkbox" id={mandatoryFieldId}
+                    onChange={this.onChangeMandatory.bind(this)}
+                    checked={this.state.mandatory} />
+                  Required
+                  </label>
+              </div>
+            </div>
+
+
+
+
+
           </div>
         </div>
       </div>
