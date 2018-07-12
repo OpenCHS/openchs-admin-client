@@ -24,12 +24,12 @@ class FormGroup extends Component {
             (this.props.displayName ? ' ' + this.props.displayName : '');
         return (
             <div className="card">
-                <div className="card-header py-2" id={headerId}>
+                <h6 className="card-header py-2" id={headerId}>
                     <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
                        aria-controls={collapseId}>
-                        <strong>{formHeader}</strong>
+                        <strong>Group: {formHeader}</strong>
                     </a>
-                </div>
+                </h6>
                 <div id={collapseId} className={collapseClass} aria-labelledby={headerId}
                      data-parent="#accordion">
                     <div className="card-body">

@@ -1,14 +1,8 @@
 import React from 'react';
 import { Container, Row, Input, ListGroup, ListGroupItem } from 'reactstrap'
 import { Link } from "react-router-dom";
+import handleErrors from '../lib/handleErrors';
 
-
-function handleErrors(response) {
-  if (!response.ok) {
-      throw Error(response.statusText);
-  }
-  return response;
-}
 
 class FindConcept extends React.Component {
   constructor(props) {

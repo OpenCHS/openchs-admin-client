@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 import handleErrors from '../lib/handleErrors';
 
@@ -11,7 +11,7 @@ export default class ChooseConcept extends React.Component {
     this.state = {
       suggestions: [],
       modal: false,
-      autoSuggestValue: props.value
+      autoSuggestValue: props.concept.name
     };
   }
 
@@ -68,28 +68,44 @@ export default class ChooseConcept extends React.Component {
     //     inputProps={inputProps} />
     // );
     return (
-      <div>
-        <a href="#" className="text-danger" onClick={this.toggle}>{this.props.linkText}</a>
-        <Modal centered isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{this.props.modalHeader}</ModalHeader>
-          <ModalBody>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <FormGroup>
-                <Label for="findConcept">Find Concept</Label>
-                <Autosuggest
-                  id={this.props.id}
-                  suggestions={this.state.suggestions}
-                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                  onSuggestionSelected={this.onSuggestionSelected}
-                  getSuggestionValue={(concept) => concept.name}
-                  renderSuggestion={(concept) => <span>{concept.name}</span>}
-                  inputProps={inputProps} />
-              </FormGroup>
-            </form>
-          </ModalBody>
-        </Modal>
-      </div>
+      <Fragment>
+        <FormGroup>
+          <Label for="conceptName">Concept name</Label>
+          <Row>
+            <Col sm>
+              <Input readOnly value={this.props.concept.name} id="conceptName" type="text"></Input>
+            </Col>
+            <Col>
+              <div>
+                <a href="#" onClick={this.toggle}><u>Choose a different concept</u></a>
+                <Modal centered isOpen={this.state.modal} toggle={this.toggle}>
+                  <ModalHeader toggle={this.toggle}>{this.props.modalHeader}</ModalHeader>
+                  <ModalBody>
+                    <form onSubmit={(e) => e.preventDefault()}>
+                      <FormGroup>
+                        <Label for="findConcept">Find Concept</Label>
+                        <Autosuggest
+                          id={this.props.id}
+                          suggestions={this.state.suggestions}
+                          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                          onSuggestionSelected={this.onSuggestionSelected}
+                          getSuggestionValue={(concept) => concept.name}
+                          renderSuggestion={(concept) => <span>{concept.name}</span>}
+                          inputProps={inputProps} />
+                      </FormGroup>
+                    </form>
+                  </ModalBody>
+                </Modal>
+              </div>
+            </Col>
+          </Row>
+        </FormGroup>
+        <FormGroup>
+          <Label for="dataType">Datatype</Label>
+          <Input readOnly value={this.props.concept.dataType} id="dataType" type="text"></Input>
+        </FormGroup>
+      </Fragment>
     );
   }
 }

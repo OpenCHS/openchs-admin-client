@@ -133,7 +133,7 @@ class FormDetails extends Component {
                 formElements.push(
                     <button type="button" className="btn btn-secondary btn-block"
                             onClick={() =>(this.addGroupField(group))} key={group.groupId + "_bt"}>
-                        Add Fields
+                        Add a field
                     </button>);
             }
         });

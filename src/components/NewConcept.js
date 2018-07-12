@@ -3,12 +3,8 @@ import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, M
 import Autosuggest from 'react-autosuggest';
 import uuidv4 from 'uuid/v4';
 
-function handleErrors(response) {
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  return response;
-}
+import handleErrors from '../lib/handleErrors';
+
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;
