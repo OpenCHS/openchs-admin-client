@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Label, Col, Input, Row, CardHeader, Card, CardBody } from 'reactstrap';
+import { FormGroup, Label, Input } from 'reactstrap';
 
 import ChooseConcept from './ChooseConcept';
+import FormElementCard from './FormElementCard';
 
 class TextComponent extends Component {
   constructor(props) {
@@ -22,44 +23,34 @@ class TextComponent extends Component {
   }
 
   render() {
-    const collapseId = "collapse_" + this.props.field.id;
-    const headerId = "heading_" + this.props.field.id;
     const mandatoryFieldId = this.props.field.id + "_mandatory";
     return (
-      <Card>
-        <CardHeader className="py-2" id={headerId}>
-          <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
-            aria-controls={collapseId}>
-            {this.state.fieldHeader}
-          </a>
-        </CardHeader>
-        <div id={collapseId} className={this.props.collapse} aria-labelledby={headerId}
-          data-parent="#accordion">
-          <CardBody>
-            <FormGroup>
-              <Label for="elementName">Element name</Label>
-              <Input placeholder="Question title"
-                type="text"
-                onChange={this.onChangeField.bind(this)}
-                value={this.state.fieldHeader} />
-            </FormGroup>
+      <FormElementCard
+        collapse={this.props.collapse}
+        field={this.props.field}
+        headerText={this.state.fieldHeader}>
+        <FormGroup>
+          <Label for="elementName">Element name</Label>
+          <Input placeholder="Question title"
+            type="text"
+            onChange={this.onChangeField.bind(this)}
+            value={this.state.fieldHeader} />
+        </FormGroup>
 
-            <ChooseConcept
-              id="chooseConcept"
-              concept={this.state.concept}
-              value={this.state.concept.name}
-              modalHeader="Choose Concept"
-              onConceptSelected={this.onConceptSelected} />
+        <ChooseConcept
+          id="chooseConcept"
+          concept={this.state.concept}
+          value={this.state.concept.name}
+          modalHeader="Choose Concept"
+          onConceptSelected={this.onConceptSelected} />
 
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" id={mandatoryFieldId} />
-                Required
+        <FormGroup check>
+          <Label check>
+            <Input type="checkbox" id={mandatoryFieldId} />
+            Required
               </Label>
-            </FormGroup>
-          </CardBody>
-        </div>
-      </Card>
+        </FormGroup>
+      </FormElementCard>
     );
   }
 }

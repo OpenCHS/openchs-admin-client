@@ -119,23 +119,26 @@ class FormDetails extends Component {
     const formElements = [];
     let i = 0;
     _.forEach(this.props.formGroups, (group) => {
+      const subElements = [];
       group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
       const isCurrentGroup = (this.state.currentGroup &&
         group.groupId === this.state.currentGroup.groupId) || false;
-      formElements.push(
-        <FormGroup id={group.groupId} name={group.name} display={group.display}
+        subElements.push(
+        <FormGroup group={group} id={group.groupId} name={group.name} display={group.display}
           fields={group.formElements} key={group.groupId + i++}
           collapse={this.state.showFields || !isCurrentGroup} />
       );
       if (this.state.showFields && isCurrentGroup) {
-        formElements.push(this.showFields(group));
+        subElements.push(this.showFields(group));
       } else {
-        formElements.push(
-          <button type="button" className="btn btn-secondary btn-block mb-2"
+        subElements.push(
+          <button type="button" className="btn btn-secondary btn-block"
             onClick={() => (this.addGroupField(group))} key={group.groupId + "_bt"}>
             Add a field
-                    </button>);
+          </button>);
       }
+      
+      formElements.push(<div key={group.groupId + "_border"} className="border border-secondary rounded mb-4">{subElements}</div>);
     });
     return formElements;
   }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { FormGroup, Label, Input, CardHeader, Card, CardBody } from 'reactstrap';
 
+import FormElementCard from './FormElementCard';
 import ChooseConcept from './ChooseConcept';
 import NumericConcept from './NumericConcept';
 import { updateNumericField } from "../actions/fields";
@@ -11,7 +12,7 @@ class NumericComponent extends Component {
   constructor(props) {
     super(props);
     let concept = this.props.field.concept;
-        
+
     this.state = {
       concept: concept,
       mandatory: false,
@@ -38,48 +39,38 @@ class NumericComponent extends Component {
   }
 
   render() {
-    const collapseId = "collapse_" + this.props.field.id;
-    const headerId = "heading_" + this.props.field.id;
     const mandatoryFieldId = this.props.field.id + "_mandatory";
     return (
-      <Card>
-        <CardHeader className="py-2" id={headerId}>
-          <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
-            aria-controls={collapseId}>
-            {this.state.fieldHeader}
-          </a>
-        </CardHeader>
-        <div id={collapseId} className={this.props.collapse} aria-labelledby={headerId}
-          data-parent="#accordion">
-          <CardBody>
-            <FormGroup>
-              <Label for="elementName">Element name</Label>
-              <Input placeholder="Question title"
-                type="text"
-                onChange={this.onChangeField.bind(this)}
-                value={this.state.fieldHeader} />
-            </FormGroup>
+      <FormElementCard
+        collapse={this.props.collapse}
+        field={this.props.field}
+        headerText={this.state.fieldHeader}>
+        <FormGroup>
+          <Label for="elementName">Element name</Label>
+          <Input placeholder="Question title"
+            type="text"
+            onChange={this.onChangeField.bind(this)}
+            value={this.state.fieldHeader} />
+        </FormGroup>
 
-            <ChooseConcept
-              id="chooseConcept"
-              concept={this.state.concept}
-              value={this.state.concept.name}
-              modalHeader="Choose Concept"
-              onConceptSelected={this.onConceptSelected} />
+        <ChooseConcept
+          id="chooseConcept"
+          concept={this.state.concept}
+          value={this.state.concept.name}
+          modalHeader="Choose Concept"
+          onConceptSelected={this.onConceptSelected} />
 
-            <NumericConcept readOnly={true} concept={this.state.concept} />
+        <NumericConcept readOnly={true} concept={this.state.concept} />
 
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" id={mandatoryFieldId}
-                  onChange={this.onChangeMandatory.bind(this)}
-                  checked={this.state.mandatory} />
-                Required
+        <FormGroup check>
+          <Label check>
+            <Input type="checkbox" id={mandatoryFieldId}
+              onChange={this.onChangeMandatory.bind(this)}
+              checked={this.state.mandatory} />
+            Required
                   </Label>
-            </FormGroup>
-          </CardBody>
-        </div>
-      </Card>
+        </FormGroup>
+      </FormElementCard>
     );
   }
 }

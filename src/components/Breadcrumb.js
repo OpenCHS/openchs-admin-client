@@ -10,11 +10,11 @@ const Breadcrumb = (props) => {
         const lastPath = paths.pop();
         paths.forEach(path=>{
             fullPath = fullPath + path + '/';
-            if (fullPath === '/') {path = 'Dashboard'}
-            items.push(<li className="breadcrumb-item" key={fullPath}><Link to={fullPath}>{_.startCase(path)}</Link></li>);
+            if (fullPath === '/') {path = 'dashboard'}
+            items.push(<li className="breadcrumb-item" key={fullPath}><Link to={fullPath}>{(path)}</Link></li>);
         });
         fullPath = fullPath + '/' + lastPath;
-        items.push(<li className="breadcrumb-item active" key={fullPath}>{_.startCase(lastPath)}</li>);
+        items.push(<li className="breadcrumb-item active" key={fullPath}>{(lastPath)}</li>);
     }
     return (
         <div className="container">

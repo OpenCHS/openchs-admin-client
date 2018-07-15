@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { FieldIcon } from "./FieldList";
 import { updateField } from "../actions/fields";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import _ from "lodash";
-import { FormGroup, Label, Col, Input, Row, CardHeader, Card, CardBody } from 'reactstrap';
+import { FormGroup, Label, Input } from 'reactstrap';
 
+import FormElementCard from './FormElementCard';
 import ChooseConcept from './ChooseConcept';
 
 const dateSubFields = [
@@ -97,7 +97,7 @@ class DateComponent extends Component {
       });
   }
 
-  onChangeMandatory(event) {
+  onChangeMandatory() {
     const isMandatory = !this.state.mandatory;
     this.setState(...this.state, { mandatory: isMandatory });
     this.props.updateField(this.props.groupId, this.props.field.id, this.props.field.name, this.props.dataType,
@@ -105,46 +105,36 @@ class DateComponent extends Component {
   }
 
   render() {
-    const collapseId = "collapse_" + this.props.field.id;
-    const headerId = "heading_" + this.props.field.id;
     const mandatoryFieldId = this.props.field.id + "_mandatory";
     return (
-      <Card>
-        <CardHeader className="py-2" id={headerId}>
-          <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
-            aria-controls={collapseId}>
-            {this.state.fieldHeader}
-          </a>
-        </CardHeader>
-        <div id={collapseId} className={this.props.collapse} aria-labelledby={headerId}
-          data-parent="#accordion">
-          <CardBody>
-            <FormGroup>
-              <Label for="elementName">Element name</Label>
-              <Input placeholder="Question title"
-                type="text"
-                onChange={this.onChangeField.bind(this)}
-                value={this.state.fieldHeader} />
-            </FormGroup>
+      <FormElementCard
+        collapse={this.props.collapse}
+        field={this.props.field}
+        headerText={this.state.fieldHeader}>
+        <FormGroup>
+          <Label for="elementName">Element name</Label>
+          <Input placeholder="Question title"
+            type="text"
+            onChange={this.onChangeField.bind(this)}
+            value={this.state.fieldHeader} />
+        </FormGroup>
 
-            <ChooseConcept
-              id="chooseConcept"
-              concept={this.state.concept}
-              value={this.state.concept.name}
-              modalHeader="Choose Concept"
-              onConceptSelected={this.onConceptSelected} />
+        <ChooseConcept
+          id="chooseConcept"
+          concept={this.state.concept}
+          value={this.state.concept.name}
+          modalHeader="Choose Concept"
+          onConceptSelected={this.onConceptSelected} />
 
-            {this.renderDateSubFields()}
+        {this.renderDateSubFields()}
 
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" id={mandatoryFieldId} />
-                Required
-            </Label>
-            </FormGroup>
-          </CardBody>
-        </div>
-      </Card>
+        <FormGroup check>
+          <Label check>
+            <Input type="checkbox" id={mandatoryFieldId} />
+            Required
+              </Label>
+        </FormGroup>
+      </FormElementCard>
     );
   }
 }
@@ -156,6 +146,6 @@ DateComponent.propTypes = {
   collapse: PropTypes.string
 };
 
-export default connect((state) => {
+export default connect(() => {
   return { dataType: 'Date' };
 }, { updateField })(DateComponent);
