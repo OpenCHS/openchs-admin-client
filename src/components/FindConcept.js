@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Input, ListGroup, ListGroupItem } from 'reactstrap'
 import { Link } from "react-router-dom";
 import handleErrors from '../lib/handleErrors';
+import config from '../config';
 
 
 class FindConcept extends React.Component {
@@ -18,7 +19,7 @@ class FindConcept extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    fetch(`/search/concept?name=${event.target.value}`, { headers: { "ORGANISATION-NAME": "OpenCHS" } })
+    fetch(`/search/concept?name=${event.target.value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
       .then(handleErrors)
       .then(response => response.json())
       .then(concepts => this.setState({ searchResults: concepts }))

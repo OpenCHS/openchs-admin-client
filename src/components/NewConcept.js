@@ -4,6 +4,7 @@ import Autosuggest from 'react-autosuggest';
 // import uuidv4 from 'uuid/v4';
 
 import handleErrors from '../lib/handleErrors';
+import config from '../config';
 
 function uuidv4() {
   return "";
@@ -59,7 +60,7 @@ class NewConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": "OpenCHS" } })
+    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
       .then(handleErrors)
       .then(response => response.json())
       .then(conceptAnswers =>
@@ -109,7 +110,7 @@ class NewConcept extends React.Component {
       body: JSON.stringify(concepts),
       headers: {
         'Content-Type': 'application/json',
-        'ORGANISATION-NAME': 'OpenCHS'
+        'ORGANISATION-NAME': config.orgName
       }
     }).then(handleErrors)
       .then(response => alert('Concept Created'))

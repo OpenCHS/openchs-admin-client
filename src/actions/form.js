@@ -1,3 +1,6 @@
+import config from '../config';
+
+
 export const BASIC_FORM = "basicForm";
 export const FETCH_GROUPS = "fetchGroups";
 export const FETCH_FORM = "fetchForm";
@@ -13,7 +16,7 @@ export function fetchGroups(formName, uuid, callback) {
     return fetch(`/forms/export?formUUID=${uuid}`, {
       credentials: 'include',
       Accept: 'application/json',
-      headers: { "ORGANISATION-NAME": "OpenCHS" }
+      headers: { "ORGANISATION-NAME": config.orgName }
     })
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {

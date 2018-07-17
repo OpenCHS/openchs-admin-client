@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import 'whatwg-fetch';
 import ProgramCard from './ProgramCard';
 import NewFormModal, {NewFormButton} from "./NewFormModal";
+import config from '../config';
 
 class Forms extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class Forms extends Component {
                 method: 'GET',
                 credentials: 'include',
                 Accept: 'application/json',
-                headers: { "ORGANISATION-NAME": "OpenCHS" }})
+                headers: { "ORGANISATION-NAME": config.orgName }})
             .then((response) => {
                 if (response.status >= 200 && response.status < 300) {
                     return response.json();

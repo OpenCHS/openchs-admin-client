@@ -10,6 +10,8 @@ import FieldList from "./FieldList";
 import addField, { addGroup } from "../actions/fields";
 import updateBasicForm, { fetchGroups } from "../actions/form";
 
+import config from '../config';
+
 class FormDetails extends Component {
   constructor(props) {
     super(props);
@@ -66,7 +68,7 @@ class FormDetails extends Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'ORGANISATION-NAME': 'OpenCHS'
+        'ORGANISATION-NAME': config.orgName
       },
       body: JSON.stringify(form),
     })

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import config from '../config';
 
 import handleErrors from '../lib/handleErrors';
 
@@ -20,7 +21,7 @@ export default class ChooseConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": "OpenCHS" } })
+    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
       .then(handleErrors)
       .then(response => response.json())
       .then(concepts => this.setState({ suggestions: concepts }))
