@@ -78,6 +78,10 @@ export default class ChooseConcept extends React.Component {
             </Col>
             <Col>
               <div>
+                {/*TODO: Remove href from the following anchor tag. Having the href scrolls the page to top regardless of where in page you are. 
+                  Style it so it looks like a link and has a hand cursor instead of text.
+                  Or make it a span and give link like styling using bootstrap(if not possible via bootstrap then by manual css)
+                */}
                 <a href="#" onClick={this.toggle}><u>Choose a different concept</u></a>
                 <Modal centered isOpen={this.state.modal} toggle={this.toggle}>
                   <ModalHeader toggle={this.toggle}>{this.props.modalHeader}</ModalHeader>
