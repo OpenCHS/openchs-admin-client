@@ -2,9 +2,10 @@ import React from 'react';
 import { Card, CardHeader, CardBody, Row, Col, UncontrolledTooltip } from 'reactstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import config from '../config';
 
 const FormElementCard = ({ field, headerText, collapse, children }) => {
-  const collapseId = "collapse_" + field.id;
+  const collapseId = "collapse_" + field.uuid;
   const headerId = "heading_" + field.id;
 
   return (
@@ -12,7 +13,7 @@ const FormElementCard = ({ field, headerText, collapse, children }) => {
       <CardHeader className="py-2" id={headerId}>
         <Row>
           <Col sm="7">
-            <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
+            <a className={config.orgClassName(field.organisationId)} data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
               aria-controls={collapseId}>
               {headerText}
             </a>

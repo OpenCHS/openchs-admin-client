@@ -4,6 +4,10 @@
   color: white !important;
 }
 
+a.black {
+  color: black;
+}
+
 .react-autosuggest__container {
   position: relative;
 }

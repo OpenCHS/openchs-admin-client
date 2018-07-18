@@ -7,6 +7,8 @@ import _ from 'lodash';
 import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import config from '../config';
+
 class FormGroup extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,7 @@ class FormGroup extends Component {
         <div className="card-header py-2" id={headerId}>
           <Row>
             <Col sm="7">
-              <a data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
+              <a className={config.orgClassName(this.props.group.organisationId)} data-toggle="collapse" href={"#" + collapseId} aria-expanded="true"
                 aria-controls={collapseId}>
                 <strong>{formHeader}</strong>
               </a>
