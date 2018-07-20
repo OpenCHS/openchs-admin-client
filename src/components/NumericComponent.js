@@ -1,42 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
-import { FormGroup, Label, Input, CardHeader, Card, CardBody } from 'reactstrap';
+import { FormGroup, Label, Input } from 'reactstrap';
 
 import FormElementCard from './FormElementCard';
 import ChooseConcept from './ChooseConcept';
 import NumericConcept from './NumericConcept';
-import { updateNumericField } from "../actions/fields";
 
 class NumericComponent extends Component {
-  constructor(props) {
-    super(props);
-    let concept = this.props.field.concept;
-
-    this.state = {
-      concept: concept,
-      mandatory: false,
-      fieldHeader: this.props.field.name || 'Question'
-    };
-  }
 
   onConceptSelected = (concept) => {
     this.setState({ concept: concept });
   };
-
-  onChangeField(event) {
-    const fieldName = event.target.value;
-    this.props.updateNumericField(this.props.groupId, this.props.field.id, fieldName, this.props.field.lowAbsolute,
-      this.props.field.highAbsolute, this.props.field.lowNormal, this.props.field.unit, this.state.mandatory);
-    this.setState({ ...this.state, fieldHeader: fieldName });
-  }
-
-  onChangeMandatory() {
-    this.setState(...this.state, { mandatory: !this.state.mandatory });
-    this.props.updateNumericField(this.props.groupId, this.props.field.id, this.props.field.fieldName,
-      this.props.field.lowAbsolute, this.props.field.highAbsolute,
-      this.props.field.lowNormal, this.props.field.unit, this.state.mandatory);
-  }
 
   render() {
     const mandatoryFieldId = this.props.field.id + "_mandatory";
@@ -44,29 +18,34 @@ class NumericComponent extends Component {
       <FormElementCard
         collapse={this.props.collapse}
         field={this.props.field}
-        headerText={this.state.fieldHeader}>
+        headerText={this.props.field.name}>
         <FormGroup>
           <Label for="elementName">Element name</Label>
           <Input placeholder="Question title"
+            id="elementName"
+            name="name"
             type="text"
-            onChange={this.onChangeField.bind(this)}
-            value={this.state.fieldHeader} />
+            onChange={({ target }) => this.props.handleInputChange(target.name, target.value, this.props.field)}
+            value={this.props.field.name} />
         </FormGroup>
 
         <ChooseConcept
           id="chooseConcept"
-          concept={this.state.concept}
-          value={this.state.concept.name}
+          concept={this.props.field.concept}
+          value={this.props.field.concept.name}
           modalHeader="Choose Concept"
-          onConceptSelected={this.onConceptSelected} />
+          onConceptSelected={(concept) => this.props.handleInputChange('concept', concept, this.props.field)} />
 
-        <NumericConcept readOnly={true} concept={this.state.concept} />
+        <NumericConcept readOnly={true} concept={this.props.field.concept} />
 
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" id={mandatoryFieldId}
-              onChange={this.onChangeMandatory.bind(this)}
-              checked={this.state.mandatory} />
+            <Input
+              name="mandatory"
+              type="checkbox"
+              id={mandatoryFieldId}
+              onChange={({ target }) => this.props.handleInputChange(target.name, target.checked, this.props.field)}
+              checked={this.props.field.mandatory} />
             Required
                   </Label>
         </FormGroup>
@@ -82,6 +61,4 @@ NumericComponent.propTypes = {
   collapse: PropTypes.string
 };
 
-export default connect(() => {
-  return {};
-}, { updateNumericField })(NumericComponent);
+export default NumericComponent;

@@ -46,7 +46,12 @@ class TextComponent extends Component {
 
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" id={mandatoryFieldId} />
+            <Input 
+              name="mandatory"
+              onChange={(event) => this.props.handleInputChange(event, this.props.field)} 
+              checked={this.props.field.mandatory} 
+              type="checkbox" 
+              id={mandatoryFieldId} />
             Required
               </Label>
         </FormGroup>

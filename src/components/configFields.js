@@ -15,9 +15,9 @@ const fieldsMetadata = [{
     icon: "font",
     label: "Text",
     dataType: "Text",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, collapse, readOnly, handleInputChange) => (
         <TextComponent groupId={groupId} field={field} fieldMetadata={fieldsMetadata[1]} key={field.id}
-                       collapse={collapse} readOnly={readOnly}/>)
+                       collapse={collapse} readOnly={readOnly} handleInputChange={handleInputChange}/>)
 },{
     id: "calendarField",
     icon: "calendar",
@@ -52,8 +52,8 @@ const fieldsMetadata = [{
     iconContent: "#",
     label: "Number",
     dataType: "Numeric",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, collapse, readOnly, handleInputChange) => (
         <NumericComponent groupId={groupId} field={field} fieldMetadata={fieldsMetadata[5]} key={field.id}
-                       collapse={collapse} readOnly={readOnly}/>)
+                       collapse={collapse} readOnly={readOnly} handleInputChange={handleInputChange} />)
 }];
 export default fieldsMetadata;

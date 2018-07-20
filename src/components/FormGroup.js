@@ -16,7 +16,7 @@ class FormGroup extends Component {
   }
 
   onChangeField(event) {
-    this.props.updateGroup(this.props.id, event.target.name, event.target.value);
+    // this.props.updateGroup(this.props.id, event.target.name, event.target.value);
   }
 
   renderGroup() {
@@ -92,7 +92,7 @@ class FormGroup extends Component {
           (this.props.fields.length === i ? collapse + " show" : collapse);
         inputField.id = fieldId;
         const readonly = true;
-        const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly);
+        const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly, this.props.handleInputChange);
 
         console.log(fieldId + " cmp: " + fieldComponent);
         inputFields.push(
@@ -127,6 +127,4 @@ FormGroup.propTypes = {
   collapse: PropTypes.bool
 };
 
-export default connect((state) => {
-  return {}
-}, { updateGroup })(FormGroup);
+export default FormGroup;

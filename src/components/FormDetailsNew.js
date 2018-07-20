@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+// import produce from "immer"
 
 import FormGroup from "./FormGroup";
 import UpdateForm from "./UpdateForm";
@@ -10,10 +11,11 @@ import config from '../config';
 import handleErrors from '../lib/handleErrors';
 
 class FormDetailsNew extends Component {
+
   constructor(props) {
     super(props);
 
-    this.state = { form: {}, formGroups: {}, showFields: true, currentGroup: {} };
+    this.state = { form: {}, showFields: true, currentGroup: {} };
 
     this.onSelectField = this.onSelectField.bind(this);
     this.addGroupField = this.addGroupField.bind(this);
@@ -37,7 +39,7 @@ class FormDetailsNew extends Component {
         throw error;
       })
       .then((form) => {
-        this.setState({ form: form, formGroups: form.formElementGroups });
+        this.setState({ form: form });
       })
       .catch((error) => {
         console.log(error);
@@ -75,23 +77,23 @@ class FormDetailsNew extends Component {
       },
       body: JSON.stringify(form),
     })
-    .then(handleErrors)
-    .catch(err => {
-      alert(err);
-    });
+      .then(handleErrors)
+      .catch(err => {
+        alert(err);
+      });
   }
 
   onSelectField(field, groupId) {
     let currentGroup;
     let showFields;
     if (field.type === 'Group') {
-      const groupId = "group_" + (this.state.formGroups.length + 1);
+      const groupId = "group_" + (this.state.form.formElementGroups.length + 1);
       currentGroup = createGroup(groupId);
       // addGroup(currentGroup);
-      this.state.formGroups.push(currentGroup);
+      this.state.form.formElementGroups.push(currentGroup);
       showFields = true;
     } else {
-      currentGroup = _.find(this.state.formGroups, (group) => {
+      currentGroup = _.find(this.state.form.formElementGroups, (group) => {
         return group.groupId === groupId;
       });
       const groupFields = currentGroup.formElements;
@@ -107,6 +109,27 @@ class FormDetailsNew extends Component {
     this.setState({ currentGroup, showFields });
   }
 
+  handleInputChange = (name, value, field) => {
+    // const target = event.target;
+    // const value = target.type === 'checkbox' ? target.checked : target.value;
+    // const name = target.name;
+    const draft = this.state.form;
+
+    for (const group of draft.formElementGroups) {
+      for (const element of group.formElements) {
+        if (element.uuid == field.uuid) {
+          element[name] = value;
+          break;
+        }
+      }
+    }
+
+    this.setState({
+      form: draft
+    });
+
+  }
+
   /**
    * single group, no fields added show the fields panel
    * single group, selected a field, add field component and 'Add field' button. Except last field, all other fields
@@ -119,7 +142,7 @@ class FormDetailsNew extends Component {
   renderGroups() {
     const formElements = [];
     let i = 0;
-    _.forEach(this.state.formGroups, (group) => {
+    _.forEach(this.state.form.formElementGroups, (group) => {
       const subElements = [];
       group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
       const isCurrentGroup = (this.state.currentGroup &&
@@ -127,6 +150,7 @@ class FormDetailsNew extends Component {
       subElements.push(
         <FormGroup group={group} id={group.groupId} name={group.name} display={group.display}
           fields={group.formElements} key={group.groupId + i++}
+          handleInputChange={this.handleInputChange}
           collapse={this.state.showFields || !isCurrentGroup} />
       );
       if (this.state.showFields && isCurrentGroup) {
