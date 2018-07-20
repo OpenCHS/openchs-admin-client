@@ -45,10 +45,11 @@ export default class ChooseConcept extends React.Component {
     this.props.onConceptSelected(suggestion);
   };
 
-  toggle = () => {
+  toggle = (event) => {
     this.setState({
       modal: !this.state.modal
     });
+    event.preventDefault();
   }
 
   render() {
@@ -56,18 +57,7 @@ export default class ChooseConcept extends React.Component {
       value: this.state.autoSuggestValue,
       onChange: this.onAutoSuggestChange
     };
-
-    // return (
-    //   <Autosuggest
-    //     id={this.props.id}
-    //     suggestions={this.state.suggestions}
-    //     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-    //     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-    //     onSuggestionSelected={this.onSuggestionSelected}
-    //     getSuggestionValue={(concept) => concept.name}
-    //     renderSuggestion={(concept) => <span>{concept.name}</span>}
-    //     inputProps={inputProps} />
-    // );
+    
     return (
       <Fragment>
         <FormGroup>
@@ -78,11 +68,7 @@ export default class ChooseConcept extends React.Component {
             </Col>
             <Col>
               <div>
-                {/*TODO: Remove href from the following anchor tag. Having the href scrolls the page to top regardless of where in page you are. 
-                  Style it so it looks like a link and has a hand cursor instead of text.
-                  Or make it a span and give link like styling using bootstrap(if not possible via bootstrap then by manual css)
-                */}
-                <a href="#" onClick={this.toggle}><u>Choose a different concept</u></a>
+                <a href="#0" onClick={this.toggle}><u>Choose a different concept</u></a>
                 <Modal centered isOpen={this.state.modal} toggle={this.toggle}>
                   <ModalHeader toggle={this.toggle}>{this.props.modalHeader}</ModalHeader>
                   <ModalBody>
