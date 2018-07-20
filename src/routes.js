@@ -5,7 +5,7 @@ import Forms from "./components/Forms";
 import Concepts from "./components/Concepts";
 import Breadcrumb from "./components/Breadcrumb";
 import {Route, Switch} from 'react-router-dom';
-import FormDetails from "./components/FormDetails";
+import FormDetailsNew from "./components/FormDetailsNew";
 import NewConcept from './components/NewConcept';
 import Concept from './components/Concept';
 
@@ -30,7 +30,7 @@ const ViewConcept = (props) => {
 }
 
 const AddFields = (props) => {
-    return <App content={FormDetails} breadcrumb={Breadcrumb} {...props}/>
+    return <App content={FormDetailsNew} breadcrumb={Breadcrumb} {...props}/>
 };
 
 export default function Routes(props) {

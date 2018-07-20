@@ -29,7 +29,7 @@ class UpdateForm extends Component {
       <label htmlFor="programName">Program Name</label>
       <select className="form-control" id="programNameSelect" name="programName"
         onChange={this.onChangeField.bind(this)}
-        defaultValue={this.props.programName}>
+        defaultValue={this.props.form.programName}>
         <option>Mother</option>
         <option>Child</option>
         <option>Diabetes</option>
@@ -40,16 +40,16 @@ class UpdateForm extends Component {
   encounterTypesElement() {
     return <div className="form-group">
       <label htmlFor="encounterTypes">Encounter Type</label>
-      <TagsInput value={this.props.encounterTypes || []} onChange={this.onChangeEncounterField.bind(this)} id="encounterTypes"
+      <TagsInput value={this.props.form.encounterTypes || []} onChange={this.onChangeEncounterField.bind(this)} id="encounterTypes"
         inputProps={{ placeholder: "" }} />
     </div>;
   }
 
   render() {
-    const encounterTypes = this.props.formType === "Encounter" || this.props.formType === "ProgramEncounter";
-    const programBased = this.props.formType === "ProgramEncounter" ||
-      this.props.formType === "ProgramExit" ||
-      this.props.formType === "ProgramEnrolment";
+    const encounterTypes = this.props.form.formType === "Encounter" || this.props.form.formType === "ProgramEncounter";
+    const programBased = this.props.form.formType === "ProgramEncounter" ||
+      this.props.form.formType === "ProgramExit" ||
+      this.props.form.formType === "ProgramEnrolment";
     return (
       <form>
         <div className="form-group has-danger">
@@ -57,7 +57,7 @@ class UpdateForm extends Component {
           <input type="text" className="form-control  form-control-danger" id="formName"
             name="name"
             aria-describedby="formNameHelp"
-            defaultValue={this.props.name}
+            defaultValue={this.props.form.name}
             placeholder="Enter form name" onChange={this.onChangeField.bind(this)} />
         </div>
         <div className="form-group">
@@ -65,7 +65,7 @@ class UpdateForm extends Component {
           <select className="form-control" id="formTypeSelect"
             name="formType"
             onChange={this.onChangeField.bind(this)}
-            defaultValue={this.props.formType}>
+            defaultValue={this.props.form.formType}>
             <option>IndividualProfile</option>
             <option>Encounter</option>
             <option>ProgramEncounter</option>
@@ -80,9 +80,12 @@ class UpdateForm extends Component {
     );
   }
 }
-export default connect((state) => {
-  return {
-    name: state.currentForm.name, formType: state.currentForm.formType,
-    programName: state.currentForm.programName, encounterTypes: state.currentForm.encounterTypes
-  }
-}, { addNewForm })(UpdateForm);
+
+export default UpdateForm;
+
+// export default connect((state) => {
+//   return {
+//     name: state.currentForm.name, formType: state.currentForm.formType,
+//     programName: state.currentForm.programName, encounterTypes: state.currentForm.encounterTypes
+//   }
+// }, { addNewForm })(UpdateForm);
