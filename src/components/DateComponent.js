@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { updateField } from "../actions/fields";
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
 import _ from "lodash";
 import { FormGroup, Label, Input } from 'reactstrap';
 
@@ -146,6 +144,4 @@ DateComponent.propTypes = {
   collapse: PropTypes.string
 };
 
-export default connect(() => {
-  return { dataType: 'Date' };
-}, { updateField })(DateComponent);
+export default DateComponent;
