@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { updateGroup } from "../actions/fields";
 import fieldsMetadata from './configFields';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Row, Col, UncontrolledTooltip } from 'reactstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import ConceptComponent from './concepts/ConceptComponent';
 import config from '../config';
 
 class FormGroup extends Component {
@@ -16,7 +15,6 @@ class FormGroup extends Component {
   }
 
   onChangeField(event) {
-    // this.props.updateGroup(this.props.id, event.target.name, event.target.value);
   }
 
   renderGroup() {
@@ -54,16 +52,19 @@ class FormGroup extends Component {
           <div className="card-body">
             <div className="form-row">
               <div className="form-inline mb-2">
+
                 <label htmlFor="groupName" className="mr-sm-2">Group: </label>
                 <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
                   id={this.props.id + '_groupName'}
                   placeholder="Enter group" defaultValue={this.props.name} name="name"
                   onChange={this.onChangeField.bind(this)} />
+
                 <label htmlFor="groupDisplay" className="mr-sm-2">Display:</label>
                 <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
                   id={this.props.id + '_groupDisplay'} name="displayName"
                   placeholder="Enter display" defaultValue={this.props.displayName}
                   onChange={this.onChangeField.bind(this)} />
+
               </div>
             </div>
           </div>
@@ -77,28 +78,29 @@ class FormGroup extends Component {
     const collapse = "collapse";
     _.forEach(this.props.fields, (inputField) => {
       if (!inputField.concept) {
-        console.log("Null concept for: " + inputField.id);
-        console.log(" name, " + inputField.name + ", type: " + inputField.type);
+        console.error("Null concept for: " + inputField.id);
+        console.error(" name, " + inputField.name + ", type: " + inputField.type);
       }
       i++;
       const fieldMetadata = _.find(fieldsMetadata, (field) => {
         return inputField.concept && (field.dataType === inputField.concept.dataType);
       });
       if (!fieldMetadata) {
-        console.log("No field metadata found for " + (inputField.name + ", dataType " + inputField.dataType));
+        console.error("No field metadata found for " + (inputField.name + ", dataType " + inputField.dataType));
       } else {
         const fieldId = (inputField.id || inputField.name).replace(/[^a-zA-Z0-9]/g, "_");
         const collapseClass = this.props.collapse === true ? collapse :
           (this.props.fields.length === i ? collapse + " show" : collapse);
         inputField.id = fieldId;
         const readonly = true;
-        const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly, this.props.handleInputChange);
+        const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly, this.props.handleKeyValuesChange);
 
-        console.log(fieldId + " cmp: " + fieldComponent);
         inputFields.push(
           <div className="row" key={fieldId}>
             <div className="col-12">
-              {fieldComponent}
+              <ConceptComponent field={inputField} collapseClass={collapseClass} handleInputChange={this.props.handleInputChange}>
+                {fieldComponent}
+              </ConceptComponent>
             </div>
           </div>
         );

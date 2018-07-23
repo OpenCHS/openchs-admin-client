@@ -57,7 +57,7 @@ export default class ChooseConcept extends React.Component {
       value: this.state.autoSuggestValue,
       onChange: this.onAutoSuggestChange
     };
-    
+
     return (
       <Fragment>
         <FormGroup>

@@ -1,41 +1,49 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+// import produce from "immer"
 
 import FormGroup from "./FormGroup";
 import UpdateForm from "./UpdateForm";
 import FieldList from "./FieldList";
 
-import addField, { addGroup } from "../actions/fields";
-import updateBasicForm, { fetchGroups } from "../actions/form";
-
 import config from '../config';
+import handleErrors from '../lib/handleErrors';
 
 class FormDetails extends Component {
+
   constructor(props) {
     super(props);
-    if (this.props.formGroups.length === 0) {
-      const firstGroup = createGroup('group_1');
-      this.props.formGroups.push(firstGroup);
-      this.state = { formGroups: this.props.formGroups, currentGroup: firstGroup, showFields: true };
-    } else if (this.props.formGroups.length === 1) {
-      this.state = { formGroups: this.props.formGroups, currentGroup: this.props.formGroups[0], showFields: true };
-    }
-    else {
-      this.state = { formGroups: this.props.formGroups, showFields: false, currentGroup: {} };
-    }
+
+    this.state = { form: {}, showFields: true, currentGroup: {} };
 
     this.onSelectField = this.onSelectField.bind(this);
     this.addGroupField = this.addGroupField.bind(this);
   }
 
   componentDidMount() {
-    const emptyCallback = () => { };
-
-    //debugger;
-    // this.props.updateBasicForm(form.name, form.formType, form.programName, form.encounterTypes);
-    this.props.fetchGroups(this.props.form.name, this.props.match.params.formUUID, emptyCallback);
+    return fetch(`/forms/export?formUUID=${this.props.match.params.formUUID}`, {
+      credentials: 'include',
+      Accept: 'application/json',
+      headers: { "ORGANISATION-NAME": config.orgName }
+    })
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          return response.json();
+        } else if (response.status === 401 || response.status === 403) {
+          window.location.pathname = '/';
+          return null;
+        }
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      })
+      .then((form) => {
+        this.setState({ form: form });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   renderForm() {
@@ -45,11 +53,7 @@ class FormDetails extends Component {
           {this.renderGroups()}
           <button type="button" className="btn btn-success pull-right"
             onClick={() => {
-              const completeForm = {
-                ...this.props.form,
-                formElementGroups: this.state.formGroups
-              };
-              this.saveForm(completeForm);
+              this.saveForm();
               this.props.history.push("/forms");
             }}>
             <i className={`glyphicon glyphicon-save`} />
@@ -59,9 +63,10 @@ class FormDetails extends Component {
       </div>);
   }
 
-  saveForm(form) {
-    _.remove(form.formElementGroups, (group) => (_.isEmpty(group.name)));
-    console.log(JSON.stringify(form));
+  saveForm() {
+    const form = this.state.form;
+    // form.name = "Mother Enrolment New";
+    // alert(JSON.stringify(form));
     fetch("/forms", {
       method: 'POST',
       credentials: 'include',
@@ -72,13 +77,9 @@ class FormDetails extends Component {
       },
       body: JSON.stringify(form),
     })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          return response.json();
-        }
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
+      .then(handleErrors)
+      .catch(err => {
+        alert(err);
       });
   }
 
@@ -86,13 +87,13 @@ class FormDetails extends Component {
     let currentGroup;
     let showFields;
     if (field.type === 'Group') {
-      const groupId = "group_" + (this.props.formGroups.length + 1);
+      const groupId = "group_" + (this.state.form.formElementGroups.length + 1);
       currentGroup = createGroup(groupId);
-      addGroup(currentGroup);
-      this.props.formGroups.push(currentGroup);
+      // addGroup(currentGroup);
+      this.state.form.formElementGroups.push(currentGroup);
       showFields = true;
     } else {
-      currentGroup = _.find(this.props.formGroups, (group) => {
+      currentGroup = _.find(this.state.form.formElementGroups, (group) => {
         return group.groupId === groupId;
       });
       const groupFields = currentGroup.formElements;
@@ -101,11 +102,62 @@ class FormDetails extends Component {
       if (field.type) {
         groupField = { ...groupField, type: field.type };
       }
-      addField(groupField, currentGroup.groupId);
+      // addField(groupField, currentGroup.groupId);
       groupFields.push(groupField);
       showFields = false;
     }
-    this.setState({ formGroups: this.props.formGroups, currentGroup, showFields });
+    this.setState({ currentGroup, showFields });
+  }
+
+  handleKeyValuesChange = (key, value, checked, field) => {
+    const draft = this.state.form;
+
+    for (const group of draft.formElementGroups) {
+      for (const element of group.formElements) {
+        if (element.uuid == field.uuid) {
+          let foundMatchingKeyValue = false;
+          for (const keyValue of element.keyValues) {
+            if (keyValue.key == key) {
+              foundMatchingKeyValue = true;
+              if(checked) {
+                keyValue.value.push(value);
+                keyValue.value = _.uniq(keyValue.value);
+              } else {
+                keyValue.value = keyValue.value.filter(v => v != value);
+              }
+              break;
+            }
+          }
+
+          if(!foundMatchingKeyValue) {
+            element.keyValues.push({
+              "key": key,
+              "value": checked ? [value] : []
+            });
+          }
+        }
+      }
+    }
+
+    this.setState({ form: draft });
+  }
+
+  handleInputChange = (name, value, field) => {
+    const draft = this.state.form;
+
+    for (const group of draft.formElementGroups) {
+      for (const element of group.formElements) {
+        if (element.uuid == field.uuid) {
+          element[name] = value;
+          break;
+        }
+      }
+    }
+
+    this.setState({
+      form: draft
+    });
+
   }
 
   /**
@@ -120,14 +172,16 @@ class FormDetails extends Component {
   renderGroups() {
     const formElements = [];
     let i = 0;
-    _.forEach(this.props.formGroups, (group) => {
+    _.forEach(this.state.form.formElementGroups, (group) => {
       const subElements = [];
       group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
       const isCurrentGroup = (this.state.currentGroup &&
         group.groupId === this.state.currentGroup.groupId) || false;
-        subElements.push(
+      subElements.push(
         <FormGroup group={group} id={group.groupId} name={group.name} display={group.display}
           fields={group.formElements} key={group.groupId + i++}
+          handleInputChange={this.handleInputChange}
+          handleKeyValuesChange={this.handleKeyValuesChange}
           collapse={this.state.showFields || !isCurrentGroup} />
       );
       if (this.state.showFields && isCurrentGroup) {
@@ -139,7 +193,7 @@ class FormDetails extends Component {
             Add a field
           </button>);
       }
-      
+
       formElements.push(<div key={group.groupId + "_border"} className="border border-secondary rounded mb-4">{subElements}</div>);
     });
     return formElements;
@@ -153,6 +207,7 @@ class FormDetails extends Component {
   }
 
   addGroupField(currentGroup) {
+    return;
     this.setState({ currentGroup, showFields: true, anchor: this.props.groupId + "_FieldList" });
   }
 
@@ -168,7 +223,7 @@ class FormDetails extends Component {
       <div className="row">
         {this.renderForm()}
         <div className="col-3">
-          <UpdateForm />
+          <UpdateForm form={this.state.form} />
         </div>
       </div>
     );
@@ -189,6 +244,4 @@ function createGroup(id) {
   return { groupId: id, name: '', display: '', formElements: [] }
 }
 
-export default connect((state) => {
-  return { form: state.currentForm, formGroups: state.formElementGroups }
-}, { updateBasicForm, fetchGroups, addField, addGroup })(FormDetails);
+export default FormDetails;

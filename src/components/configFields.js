@@ -1,9 +1,8 @@
 import React from 'react';
-import TextComponent from "./TextComponent";
-import DateComponent from "./DateComponent";
-import MultiCodedComponent from "./MultiCodedComponent";
-import SingleCodedComponent from "./SingleCodedComponent";
-import NumericComponent from "./NumericComponent";
+import DateComponent from "./concepts/DateComponent";
+import MultiCodedComponent from "./concepts/MultiCodedComponent";
+import SingleCodedComponent from "./concepts/SingleCodedComponent";
+import NumericComponent from "./concepts/NumericComponent";
 
 const fieldsMetadata = [{
     id: "groupField",
@@ -15,17 +14,17 @@ const fieldsMetadata = [{
     icon: "font",
     label: "Text",
     dataType: "Text",
-    component: (groupId, field, collapse, readOnly, handleInputChange) => (
-        <TextComponent groupId={groupId} field={field} fieldMetadata={fieldsMetadata[1]} key={field.id}
-                       collapse={collapse} readOnly={readOnly} handleInputChange={handleInputChange}/>)
+    component: (groupId, field, collapse, readOnly) => (
+        <div></div>)
 },{
     id: "calendarField",
     icon: "calendar",
     label: "Date",
     dataType: "Date",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, collapse, readOnly, handleKeyValuesChange) => (
         <DateComponent groupId={groupId} field={field} fieldMetadata={fieldsMetadata[2]} key={field.id}
-                       collapse={collapse} readOnly={readOnly}/>)
+                       collapse={collapse} readOnly={readOnly} handleKeyValuesChange={handleKeyValuesChange} />
+    )
 }, {
     id: "multiCodedField",
     icon: "align-left",
@@ -52,8 +51,8 @@ const fieldsMetadata = [{
     iconContent: "#",
     label: "Number",
     dataType: "Numeric",
-    component: (groupId, field, collapse, readOnly, handleInputChange) => (
+    component: (groupId, field, collapse, readOnly) => (
         <NumericComponent groupId={groupId} field={field} fieldMetadata={fieldsMetadata[5]} key={field.id}
-                       collapse={collapse} readOnly={readOnly} handleInputChange={handleInputChange} />)
+                       collapse={collapse} readOnly={readOnly} />)
 }];
 export default fieldsMetadata;
