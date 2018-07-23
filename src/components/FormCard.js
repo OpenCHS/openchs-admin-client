@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import {connect} from "react-redux";
 import {Link} from 'react-router-dom';
-import updateBasicForm, {fetchGroups} from "../actions/form";
 import config from '../config';
 
 class FormCard extends Component {
@@ -34,6 +32,5 @@ class FormCard extends Component {
         </div>;
     }
 }
-export default connect((state) => {
-    return {}
-}, {updateBasicForm, fetchGroups})(FormCard);
+
+export default FormCard;

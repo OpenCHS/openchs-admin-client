@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {MenuItem} from "react-bootstrap";
-import {connect} from "react-redux";
 import fieldsMetadata from './configFields';
-import addField from "../actions/fields";
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 export const FieldIcon = (props) => {
@@ -36,7 +33,7 @@ class FieldsPanel extends Component {
             cols.push(
                 <div className="col-4 list-group-item" key={fieldMetadata.icon + this.props.groupId}>
                     <MenuItem key={fieldMetadata.icon} eventKey={fieldMetadata.icon}
-                              onClick={(e) => onClick(fieldMetadata, this.props.groupId)}
+                              onClick={() => onClick(fieldMetadata, this.props.groupId)}
                               name={fieldMetadata.icon}>
                         <FieldIcon fieldMetadata={fieldMetadata}/>{" " + fieldMetadata.label}
                     </MenuItem>
@@ -67,12 +64,4 @@ class FieldsPanel extends Component {
     }
 }
 
-FieldsPanel.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    groupId: PropTypes.string,
-    groupName: PropTypes.string
-};
-
-export default connect(() => {
-    return {}
-}, {addField})(FieldsPanel);
+export default FieldsPanel;

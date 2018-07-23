@@ -1,7 +1,4 @@
 import React, {Component} from "react";
-import {connect} from 'react-redux';
-import addNewForm from "../actions/form";
-import {initGroups} from "../actions/fields";
 import TagsInput from 'react-tagsinput';
 
 export function NewFormButton() {
@@ -108,6 +105,4 @@ class NewFormModal extends Component {
     }
 }
 
-export default connect((state) => {
-    return {}
-}, {addNewForm, initGroups})(NewFormModal);
+export default NewFormModal;

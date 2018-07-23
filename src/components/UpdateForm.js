@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import addNewForm from "../actions/form";
-import { connect } from "react-redux";
 import TagsInput from 'react-tagsinput';
 
 class UpdateForm extends Component {
@@ -84,10 +82,3 @@ class UpdateForm extends Component {
 }
 
 export default UpdateForm;
-
-// export default connect((state) => {
-//   return {
-//     name: state.currentForm.name, formType: state.currentForm.formType,
-//     programName: state.currentForm.programName, encounterTypes: state.currentForm.encounterTypes
-//   }
-// }, { addNewForm })(UpdateForm);
