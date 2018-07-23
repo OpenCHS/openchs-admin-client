@@ -39,7 +39,7 @@ class CodedComponent extends Component {
       <div className="form-group">
         <label htmlFor={tagsFieldId}>{tagsFieldLabel}</label>
         <TagsInput value={tags} onChange={this.onChangeAnswers.bind(this)}
-          id={tagsFieldId} inputProps={{ placeholder: "Answer", readOnly: readOnly }} />
+          id={tagsFieldId} inputProps={{ placeholder: "Answer", disabled: readOnly }} />
       </div>
     );
   }

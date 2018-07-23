@@ -64,7 +64,7 @@ export default class ChooseConcept extends React.Component {
           <Label for="conceptName">Concept name</Label>
           <Row>
             <Col sm>
-              <Input readOnly value={this.props.concept.name} id="conceptName" type="text"></Input>
+              <Input disabled value={this.props.concept.name} id="conceptName" type="text"></Input>
             </Col>
             <Col>
               <div>
@@ -94,7 +94,7 @@ export default class ChooseConcept extends React.Component {
         </FormGroup>
         <FormGroup>
           <Label for="dataType">Datatype</Label>
-          <Input readOnly value={this.props.concept.dataType} id="dataType" type="text"></Input>
+          <Input disabled value={this.props.concept.dataType} id="dataType" type="text"></Input>
         </FormGroup>
       </Fragment>
     );
