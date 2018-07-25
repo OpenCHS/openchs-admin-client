@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-// import produce from "immer"
+import produce from "immer";
+import uuidv4 from 'uuid/v4';
 
 import FormGroup from "./FormGroup";
 import UpdateForm from "./UpdateForm";
-import FieldList from "./FieldList";
+import FieldsPanel from "./FieldsPanel";
 
 import config from '../config';
 import handleErrors from '../lib/handleErrors';
@@ -39,6 +40,9 @@ class FormDetails extends Component {
         throw error;
       })
       .then((form) => {
+        _.forEach(form.formElementGroups, (group) => {
+          group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
+        });
         this.setState({ form: form });
       })
       .catch((error) => {
@@ -65,6 +69,13 @@ class FormDetails extends Component {
 
   saveForm() {
     const form = this.state.form;
+
+    const formToBeSaved = produce(form, draftState => {
+      for (const group of draftState.formElementGroups) {
+        group.formElements = _.filter(group.formElements, e => e.name !== "" && e.concept.dataType !== "");
+      }
+    });
+
     // form.name = "Mother Enrolment New";
     // alert(JSON.stringify(form));
     fetch("/forms", {
@@ -75,7 +86,7 @@ class FormDetails extends Component {
         'Content-Type': 'application/json',
         'ORGANISATION-NAME': config.orgName
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(formToBeSaved),
     })
       .then(handleErrors)
       .catch(err => {
@@ -83,13 +94,12 @@ class FormDetails extends Component {
       });
   }
 
-  onSelectField(field, groupId) {
+  onSelectFieldOld(field, groupId) {
     let currentGroup;
     let showFields;
     if (field.type === 'Group') {
       const groupId = "group_" + (this.state.form.formElementGroups.length + 1);
       currentGroup = createGroup(groupId);
-      // addGroup(currentGroup);
       this.state.form.formElementGroups.push(currentGroup);
       showFields = true;
     } else {
@@ -97,16 +107,51 @@ class FormDetails extends Component {
         return group.groupId === groupId;
       });
       const groupFields = currentGroup.formElements;
-      const id = groupId + field.id + currentGroup.formElements.length + 1;
+      const id = groupId + field.uuid + currentGroup.formElements.length + 1;
       let groupField = { id, icon: field.icon, concept: { dataType: field.dataType } };
       if (field.type) {
         groupField = { ...groupField, type: field.type };
       }
-      // addField(groupField, currentGroup.groupId);
       groupFields.push(groupField);
       showFields = false;
     }
     this.setState({ currentGroup, showFields });
+  }
+
+  onSelectField(field, groupId) {
+    let currentGroup;
+
+    this.setState(
+      produce(draft => {
+        if (field === 'Group') {
+          const newGroupId = "group_" + (this.state.form.formElementGroups.length + 1);
+          currentGroup = { uuid: uuidv4(), groupId: newGroupId, name: '', display: '', formElements: [] }
+          draft.form.formElementGroups.push(currentGroup);
+          draft.showFields = false;
+        } else {
+          const group = _.find(draft.form.formElementGroups, (g) => {
+            return g.groupId === groupId;
+          });
+          const formElements = group.formElements;
+          let displayOrder = 1;
+          if (group.formElements && group.formElements.length) {
+            displayOrder = _.last(group.formElements).displayOrder + 1
+          }
+          const newElement = {
+            name: "",
+            mandatory: false,
+            displayOrder: displayOrder,
+            uuid: uuidv4(),
+            concept: {
+              dataType: "",
+              name: ""
+            }
+          };
+          formElements.push(newElement);
+          draft.showFields = false;
+        }
+      })
+    );
   }
 
   handleKeyValuesChange = (key, value, checked, field) => {
@@ -114,22 +159,22 @@ class FormDetails extends Component {
 
     for (const group of draft.formElementGroups) {
       for (const element of group.formElements) {
-        if (element.uuid == field.uuid) {
+        if (element.uuid === field.uuid) {
           let foundMatchingKeyValue = false;
           for (const keyValue of element.keyValues) {
-            if (keyValue.key == key) {
+            if (keyValue.key === key) {
               foundMatchingKeyValue = true;
-              if(checked) {
+              if (checked) {
                 keyValue.value.push(value);
                 keyValue.value = _.uniq(keyValue.value);
               } else {
-                keyValue.value = keyValue.value.filter(v => v != value);
+                keyValue.value = keyValue.value.filter(v => v !== value);
               }
               break;
             }
           }
 
-          if(!foundMatchingKeyValue) {
+          if (!foundMatchingKeyValue) {
             element.keyValues.push({
               "key": key,
               "value": checked ? [value] : []
@@ -142,22 +187,32 @@ class FormDetails extends Component {
     this.setState({ form: draft });
   }
 
-  handleInputChange = (name, value, field) => {
-    const draft = this.state.form;
-
-    for (const group of draft.formElementGroups) {
-      for (const element of group.formElements) {
-        if (element.uuid == field.uuid) {
-          element[name] = value;
-          break;
+  handleFieldChange = (name, value, fieldUuid) => {
+    this.setState(
+      produce(draft => {
+        for (const group of draft.form.formElementGroups) {
+          for (const element of group.formElements) {
+            if (element.uuid === fieldUuid) {
+              element[name] = value;
+              break;
+            }
+          }
         }
-      }
-    }
+      })
+    );
+  }
 
-    this.setState({
-      form: draft
-    });
-
+  handleGroupChange = (name, value, groupUuid) => {
+    this.setState(
+      produce(draft => {
+        for (const group of draft.form.formElementGroups) {
+          if (group.uuid === groupUuid) {
+            group[name] = value;
+            break;
+          }
+        }
+      })
+    );
   }
 
   /**
@@ -174,13 +229,13 @@ class FormDetails extends Component {
     let i = 0;
     _.forEach(this.state.form.formElementGroups, (group) => {
       const subElements = [];
-      group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
       const isCurrentGroup = (this.state.currentGroup &&
         group.groupId === this.state.currentGroup.groupId) || false;
       subElements.push(
-        <FormGroup group={group} id={group.groupId} name={group.name} display={group.display}
+        <FormGroup group={group}
           fields={group.formElements} key={group.groupId + i++}
-          handleInputChange={this.handleInputChange}
+          handleFieldChange={this.handleFieldChange}
+          handleGroupChange={this.handleGroupChange}
           handleKeyValuesChange={this.handleKeyValuesChange}
           collapse={this.state.showFields || !isCurrentGroup} />
       );
@@ -207,18 +262,17 @@ class FormDetails extends Component {
   }
 
   addGroupField(currentGroup) {
-    return;
-    this.setState({ currentGroup, showFields: true, anchor: this.props.groupId + "_FieldList" });
+    // return;
+    this.setState({ currentGroup, showFields: true, anchor: currentGroup.groupId + "_FieldsPanel" });
   }
 
   showFields(group) {
-    return <div ref={this.props.groupId + "_FieldList"} key={this.props.groupId + "_FieldList"}>
-      <FieldList onClick={this.onSelectField.bind(this)} groupId={group.groupId} groupName={group.name} />
+    return <div ref={group.groupId + "_FieldsPanel"} key={group.groupId + "_FieldsPanel"}>
+      <FieldsPanel onClick={this.onSelectField.bind(this)} groupId={group.groupId} groupName={group.name} />
     </div>;
   }
 
   render() {
-    console.log("render form details");
     return (
       <div className="row">
         {this.renderForm()}

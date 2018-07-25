@@ -11,7 +11,7 @@ const dateSubFields = [
 
 function checked(field, dateSubField) {
   for (const keyValue of field.keyValues) {
-    if(keyValue.key == "durationOptions") {
+    if(keyValue.key === "durationOptions") {
       return keyValue.value.includes(dateSubField.value);
     }
   }
@@ -21,7 +21,7 @@ function checked(field, dateSubField) {
 class DateComponent extends Component {
 
   renderDateSubField(dateSubField) {
-    const dateSubFieldId = dateSubField.value + "_" + this.props.field.id;
+    const dateSubFieldId = dateSubField.value + "_" + this.props.field.uuid;
 
     return (
       <div className="form-check form-check-inline" key={dateSubFieldId}>
@@ -48,9 +48,7 @@ class DateComponent extends Component {
 }
 
 DateComponent.propTypes = {
-  groupId: PropTypes.string.isRequired,
   field: PropTypes.object,
-  fieldMetadata: PropTypes.object,
 };
 
 export default DateComponent;

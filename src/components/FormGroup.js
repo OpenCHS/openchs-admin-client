@@ -11,19 +11,18 @@ import config from '../config';
 class FormGroup extends Component {
   constructor(props) {
     super(props);
-    this.state = { groupName: this.props.name };
-  }
-
-  onChangeField(event) {
+    this.state = { groupName: this.props.group.name };
   }
 
   renderGroup() {
+    const {group, handleGroupChange} = this.props;
+    const groupId = group.groupId;
     const collapse = "collapse";
     const collapseClass = this.state['groupName'] ? collapse : collapse + " show";
-    const collapseId = "collapse_" + this.props.id;
-    const headerId = "heading_" + this.props.id;
-    const formHeader = this.props.name ? ' ' + this.props.name :
-      (this.props.displayName ? ' ' + this.props.displayName : '');
+    const collapseId = "collapse_" + groupId;
+    const headerId = "heading_" + groupId;
+    const formHeader = group.name ? ' ' + group.name :
+      (group.display ? ' ' + group.display : '');
     return (
       <div className="card">
         <div className="card-header py-2" id={headerId}>
@@ -37,7 +36,7 @@ class FormGroup extends Component {
             <Col>
               <CopyToClipboard text={this.props.group.uuid}>
                 <div>
-                  <a href="#" id="form-group-uuid" className="badge badge-secondary">{this.props.group.uuid}</a>
+                  <a href="#0" id="form-group-uuid" className="badge badge-secondary">{this.props.group.uuid}</a>
                   <UncontrolledTooltip placement="bottom" target="form-group-uuid">
                     Click to copy the uuid
                   </UncontrolledTooltip>
@@ -55,15 +54,15 @@ class FormGroup extends Component {
 
                 <label htmlFor="groupName" className="mr-sm-2">Group: </label>
                 <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
-                  id={this.props.id + '_groupName'}
-                  placeholder="Enter group" defaultValue={this.props.name} name="name"
-                  onChange={this.onChangeField.bind(this)} />
+                  id={groupId + '_groupName'}
+                  placeholder="Enter group" value={group.name} name="name"
+                  onChange={({ target }) => handleGroupChange(target.name, target.value, this.props.group.uuid)} />
 
                 <label htmlFor="groupDisplay" className="mr-sm-2">Display:</label>
                 <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
-                  id={this.props.id + '_groupDisplay'} name="displayName"
-                  placeholder="Enter display" defaultValue={this.props.displayName}
-                  onChange={this.onChangeField.bind(this)} />
+                  id={groupId + '_groupDisplay'} name="display"
+                  placeholder="Enter display" value={group.display}
+                  onChange={({ target }) => handleGroupChange(target.name, target.value, this.props.group.uuid)} />
 
               </div>
             </div>
@@ -78,27 +77,25 @@ class FormGroup extends Component {
     const collapse = "collapse";
     _.forEach(this.props.fields, (inputField) => {
       if (!inputField.concept) {
-        console.error("Null concept for: " + inputField.id);
+        console.error("Null concept for: " + inputField.name);
         console.error(" name, " + inputField.name + ", type: " + inputField.type);
       }
       i++;
-      const fieldMetadata = _.find(fieldsMetadata, (field) => {
-        return inputField.concept && (field.dataType === inputField.concept.dataType);
+      const fieldMetadata = _.find(fieldsMetadata, (metadata) => {
+        return inputField.concept && (metadata.dataType === inputField.concept.dataType);
       });
       if (!fieldMetadata) {
         console.error("No field metadata found for " + (inputField.name + ", dataType " + inputField.dataType));
       } else {
-        const fieldId = (inputField.id || inputField.name).replace(/[^a-zA-Z0-9]/g, "_");
         const collapseClass = this.props.collapse === true ? collapse :
           (this.props.fields.length === i ? collapse + " show" : collapse);
-        inputField.id = fieldId;
         const readonly = true;
-        const fieldComponent = fieldMetadata.component(this.props.id, inputField, collapseClass, readonly, this.props.handleKeyValuesChange);
+        const fieldComponent = fieldMetadata.component(this.props.group.groupId, inputField, collapseClass, readonly, this.props.handleKeyValuesChange);
 
         inputFields.push(
-          <div className="row" key={fieldId}>
+          <div className="row" key={inputField.uuid}>
             <div className="col-12">
-              <ConceptComponent field={inputField} collapseClass={collapseClass} handleInputChange={this.props.handleInputChange}>
+              <ConceptComponent field={inputField} collapseClass={collapseClass} handleFieldChange={this.props.handleFieldChange}>
                 {fieldComponent}
               </ConceptComponent>
             </div>
@@ -122,9 +119,10 @@ class FormGroup extends Component {
 }
 
 FormGroup.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  displayName: PropTypes.string,
+  group: PropTypes.object.isRequired,
+  handleGroupChange: PropTypes.func.isRequired,
+  handleKeyValuesChange: PropTypes.func.isRequired,
+  handleFieldChange: PropTypes.func.isRequired,
   fields: PropTypes.array,
   collapse: PropTypes.bool
 };

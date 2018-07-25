@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import TagsInput from 'react-tagsinput';
+import _ from 'lodash';
 
 class UpdateForm extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   onUpdate() {
     //this.props.addNewForm(this.state.name, this.state.formType, this.state.programName, this.state.encounterTypes);
@@ -48,6 +46,14 @@ class UpdateForm extends Component {
     const programBased = this.props.form.formType === "ProgramEncounter" ||
       this.props.form.formType === "ProgramExit" ||
       this.props.form.formType === "ProgramEnrolment";
+    const form = this.props.form;
+
+    let last = {}; 
+    if(form.formElementGroups) {
+      last = _.last(form.formElementGroups)
+    }
+    const debugHelp = JSON.stringify(last, null, 2);
+
     return (
       <form>
         <div className="form-group has-danger">
@@ -75,7 +81,7 @@ class UpdateForm extends Component {
         {encounterTypes && this.encounterTypesElement()}
         <button type="button" className="btn btn-primary" onClick={this.onUpdate.bind(this)}>Update</button>
 
-        <div className="mt-5"><pre>{JSON.stringify(this.props.form, null, 2)}</pre></div>
+        <div className="mt-5"><pre>{debugHelp}</pre></div>
       </form>
     );
   }

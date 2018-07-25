@@ -1,14 +1,10 @@
 import React from 'react';
 import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Autosuggest from 'react-autosuggest';
-// import uuidv4 from 'uuid/v4';
+import uuidv4 from 'uuid/v4';
 
 import handleErrors from '../lib/handleErrors';
 import config from '../config';
-
-function uuidv4() {
-  return "";
-}
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;

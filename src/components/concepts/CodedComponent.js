@@ -30,7 +30,7 @@ class CodedComponent extends Component {
   }
 
   render() {
-    const tagsFieldId = this.props.field.id + "_tags";
+    const tagsFieldId = this.props.field.uuid + "_tags";
     const tags = _.map(this.props.field.concept.answers || this.props.field.concept.conceptAnswers, (answer) => (answer.name));
     const readOnly = this.props.readOnly;
     const tagsFieldLabel = readOnly ? "Answers" : "Type your choices. Press enter after each choice.";
@@ -46,11 +46,7 @@ class CodedComponent extends Component {
 }
 
 CodedComponent.propTypes = {
-  groupId: PropTypes.string.isRequired,
   field: PropTypes.object,
-  type: PropTypes.oneOf(['SingleSelect', 'MultiSelect']),
-  fieldMetadata: PropTypes.object,
-  collapse: PropTypes.string
 };
 
 export default CodedComponent;

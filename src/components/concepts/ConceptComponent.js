@@ -7,9 +7,9 @@ import { FormGroup, Label, Input } from 'reactstrap';
 import config from '../../config';
 import ChooseConcept from '../ChooseConcept';
 
-const ConceptComponent = ({ field, collapseClass, handleInputChange, children }) => {
+const ConceptComponent = ({ field, collapseClass, handleFieldChange, children }) => {
   const collapseId = "collapse_" + field.uuid;
-  const headerId = "heading_" + field.id;
+  const headerId = "heading_" + field.uuid;
 
   return (
     <Card>
@@ -24,8 +24,8 @@ const ConceptComponent = ({ field, collapseClass, handleInputChange, children })
           <Col>
             <CopyToClipboard text={field.uuid}>
               <div>
-                <a href="#" id={`${field.id}_uuid`} className="badge badge-secondary">{field.uuid}</a>
-                <UncontrolledTooltip placement="bottom" target={`${field.id}_uuid`}>
+                <a href="#0" id={`_${field.uuid}_uuid`} className="badge badge-secondary">{field.uuid}</a>
+                <UncontrolledTooltip placement="bottom" target={`_${field.uuid}_uuid`}>
                   Click to copy the uuid
               </UncontrolledTooltip>
                 {/* icon is looking ugly so commenting it out for now */}
@@ -45,7 +45,7 @@ const ConceptComponent = ({ field, collapseClass, handleInputChange, children })
               id="elementName"
               name="name"
               type="text"
-              onChange={({ target }) => handleInputChange(target.name, target.value, field)}
+              onChange={({ target }) => handleFieldChange(target.name, target.value, field.uuid)}
               value={field.name} />
           </FormGroup>
 
@@ -54,7 +54,7 @@ const ConceptComponent = ({ field, collapseClass, handleInputChange, children })
             concept={field.concept}
             value={field.concept.name}
             modalHeader="Choose Concept"
-            onConceptSelected={(concept) => handleInputChange('concept', concept, field)} />
+            onConceptSelected={(concept) => handleFieldChange('concept', concept, field.uuid)} />
 
           {children}
 
@@ -63,8 +63,8 @@ const ConceptComponent = ({ field, collapseClass, handleInputChange, children })
               <Input
                 name="mandatory"
                 type="checkbox"
-                id={field.id + "_mandatory"}
-                onChange={({ target }) => handleInputChange(target.name, target.checked, field)}
+                id={field.uuid + "_mandatory"}
+                onChange={({ target }) => handleFieldChange(target.name, target.checked, field.uuid)}
                 checked={field.mandatory} />
               Required
           </Label>
@@ -78,7 +78,7 @@ const ConceptComponent = ({ field, collapseClass, handleInputChange, children })
 ConceptComponent.propTypes = {
   field: PropTypes.object.isRequired,
   collapseClass: PropTypes.string.isRequired,
-  handleInputChange: PropTypes.func.isRequired,
+  handleFieldChange: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired
 };
 

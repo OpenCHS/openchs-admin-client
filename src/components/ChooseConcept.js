@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import config from '../config';
 
 import handleErrors from '../lib/handleErrors';
@@ -16,7 +16,7 @@ export default class ChooseConcept extends React.Component {
     };
   }
 
-  onAutoSuggestChange = (event, { newValue, method }) => {
+  onAutoSuggestChange = ({ newValue }) => {
     this.setState({ autoSuggestValue: newValue });
   };
 
@@ -36,7 +36,7 @@ export default class ChooseConcept extends React.Component {
     });
   };
 
-  onSuggestionSelected = (event, { suggestion }) => {
+  onSuggestionSelected = ({ suggestion }) => {
     this.setState({
       autoSuggestValue: '',
       modal: false
