@@ -8,6 +8,7 @@ import {Route, Switch} from 'react-router-dom';
 import FormDetails from "./components/FormDetails";
 import NewConcept from './components/NewConcept';
 import Concept from './components/Concept';
+import DebugForms from './components/DebugForms';
 
 const Default = (props) => {
     return <App content={Dashboard} {...props}/>
@@ -41,5 +42,6 @@ export default function Routes(props) {
         <Route path="/concepts/addConcept" component={AddConcept}/>
         <Route path="/concepts/:conceptId" component={ViewConcept}/>
         <Route path="/forms/:formUUID" component={AddFields}/>
+        <Route path="/debugforms" component={DebugForms} />
     </Switch>
 };

@@ -81,7 +81,7 @@ class UpdateForm extends Component {
         {encounterTypes && this.encounterTypesElement()}
         <button type="button" className="btn btn-primary" onClick={this.onUpdate.bind(this)}>Update</button>
 
-        <div className="mt-5"><pre>{debugHelp}</pre></div>
+        {/* <div className="mt-5"><pre>{debugHelp}</pre></div> */}
       </form>
     );
   }

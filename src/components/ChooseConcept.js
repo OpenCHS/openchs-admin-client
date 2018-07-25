@@ -16,7 +16,7 @@ export default class ChooseConcept extends React.Component {
     };
   }
 
-  onAutoSuggestChange = ({ newValue }) => {
+  onAutoSuggestChange = (event, { newValue, method }) => {
     this.setState({ autoSuggestValue: newValue });
   };
 
@@ -36,7 +36,7 @@ export default class ChooseConcept extends React.Component {
     });
   };
 
-  onSuggestionSelected = ({ suggestion }) => {
+  onSuggestionSelected = (event, { suggestion }) => {
     this.setState({
       autoSuggestValue: '',
       modal: false
@@ -44,6 +44,10 @@ export default class ChooseConcept extends React.Component {
 
     this.props.onConceptSelected(suggestion);
   };
+
+  componentWillUnmount() {
+    console.log("unmouting");
+  }
 
   toggle = (event) => {
     this.setState({

@@ -10,6 +10,23 @@ import FieldsPanel from "./FieldsPanel";
 
 import config from '../config';
 import handleErrors from '../lib/handleErrors';
+import { FormElementContract, FormElementGroupContract } from '../contracts';
+
+const formElementDisplayOrder = (group) => {
+  let displayOrder = 1;
+  if (group.formElements && group.formElements.length) {
+    displayOrder = _.last(group.formElements).displayOrder + 1
+  }
+  return displayOrder;
+}
+
+const groupDisplayOrder = (form) => {
+  let displayOrder = 1;
+  if (form.formElementGroups && form.formElementGroups.length) {
+    displayOrder = _.last(form.formElementGroups).displayOrder + 1
+  }
+  return displayOrder;
+}
 
 class FormDetails extends Component {
 
@@ -44,6 +61,7 @@ class FormDetails extends Component {
           group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
         });
         this.setState({ form: form });
+        localStorage.setItem("currentForm", JSON.stringify(form));
       })
       .catch((error) => {
         console.log(error);
@@ -94,30 +112,6 @@ class FormDetails extends Component {
       });
   }
 
-  onSelectFieldOld(field, groupId) {
-    let currentGroup;
-    let showFields;
-    if (field.type === 'Group') {
-      const groupId = "group_" + (this.state.form.formElementGroups.length + 1);
-      currentGroup = createGroup(groupId);
-      this.state.form.formElementGroups.push(currentGroup);
-      showFields = true;
-    } else {
-      currentGroup = _.find(this.state.form.formElementGroups, (group) => {
-        return group.groupId === groupId;
-      });
-      const groupFields = currentGroup.formElements;
-      const id = groupId + field.uuid + currentGroup.formElements.length + 1;
-      let groupField = { id, icon: field.icon, concept: { dataType: field.dataType } };
-      if (field.type) {
-        groupField = { ...groupField, type: field.type };
-      }
-      groupFields.push(groupField);
-      showFields = false;
-    }
-    this.setState({ currentGroup, showFields });
-  }
-
   onSelectField(field, groupId) {
     let currentGroup;
 
@@ -125,7 +119,14 @@ class FormDetails extends Component {
       produce(draft => {
         if (field === 'Group') {
           const newGroupId = "group_" + (this.state.form.formElementGroups.length + 1);
-          currentGroup = { uuid: uuidv4(), groupId: newGroupId, name: '', display: '', formElements: [] }
+          currentGroup = new FormElementGroupContract(
+            uuidv4(),
+            newGroupId,
+            "",
+            groupDisplayOrder(draft.form),
+            "",
+            []
+          );
           draft.form.formElementGroups.push(currentGroup);
           draft.showFields = false;
         } else {
@@ -133,58 +134,57 @@ class FormDetails extends Component {
             return g.groupId === groupId;
           });
           const formElements = group.formElements;
-          let displayOrder = 1;
-          if (group.formElements && group.formElements.length) {
-            displayOrder = _.last(group.formElements).displayOrder + 1
-          }
-          const newElement = {
-            name: "",
-            mandatory: false,
-            displayOrder: displayOrder,
-            uuid: uuidv4(),
-            concept: {
-              dataType: "",
-              name: ""
-            }
-          };
+
+          const newElement = new FormElementContract(
+            uuidv4(),
+            "",
+            formElementDisplayOrder(group),
+            { dataType: "", name: "" },
+            []
+          );
+
           formElements.push(newElement);
           draft.showFields = false;
         }
+
+        localStorage.setItem("currentForm", JSON.stringify(draft.form));
       })
     );
   }
 
   handleKeyValuesChange = (key, value, checked, field) => {
-    const draft = this.state.form;
 
-    for (const group of draft.formElementGroups) {
-      for (const element of group.formElements) {
-        if (element.uuid === field.uuid) {
-          let foundMatchingKeyValue = false;
-          for (const keyValue of element.keyValues) {
-            if (keyValue.key === key) {
-              foundMatchingKeyValue = true;
-              if (checked) {
-                keyValue.value.push(value);
-                keyValue.value = _.uniq(keyValue.value);
-              } else {
-                keyValue.value = keyValue.value.filter(v => v !== value);
+    this.setState(
+      produce(draft => {
+        for (const group of draft.form.formElementGroups) {
+          for (const element of group.formElements) {
+            if (element.uuid === field.uuid) {
+              let foundMatchingKeyValue = false;
+              for (const keyValue of element.keyValues) {
+                if (keyValue.key === key) {
+                  foundMatchingKeyValue = true;
+                  if (checked) {
+                    keyValue.value.push(value);
+                    keyValue.value = _.uniq(keyValue.value);
+                  } else {
+                    keyValue.value = keyValue.value.filter(v => v !== value);
+                  }
+                  break;
+                }
               }
-              break;
+
+              if (!foundMatchingKeyValue) {
+                element.keyValues.push({
+                  "key": key,
+                  "value": checked ? [value] : []
+                });
+              }
             }
           }
-
-          if (!foundMatchingKeyValue) {
-            element.keyValues.push({
-              "key": key,
-              "value": checked ? [value] : []
-            });
-          }
         }
-      }
-    }
-
-    this.setState({ form: draft });
+        localStorage.setItem("currentForm", JSON.stringify(draft.form));
+      })
+    );
   }
 
   handleFieldChange = (name, value, fieldUuid) => {
@@ -198,8 +198,11 @@ class FormDetails extends Component {
             }
           }
         }
+
+        localStorage.setItem("currentForm", JSON.stringify(draft.form));
       })
     );
+
   }
 
   handleGroupChange = (name, value, groupUuid) => {
@@ -211,6 +214,8 @@ class FormDetails extends Component {
             break;
           }
         }
+
+        localStorage.setItem("currentForm", JSON.stringify(draft.form))
       })
     );
   }
