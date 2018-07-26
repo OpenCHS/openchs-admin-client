@@ -20,17 +20,16 @@ const fieldsMetadata = [
     icon: "font",
     label: "Text",
     dataType: "Text",
-    component: (groupId, field, collapse, readOnly) => (
-      <div></div>)
+    component: () => <div></div>
   },
   {
     id: "calendarField",
     icon: "calendar",
     label: "Date",
     dataType: "Date",
-    component: (groupId, field, collapse, readOnly, handleKeyValuesChange) => (
+    component: (groupId, field, readOnly, handleKeyValuesChange) => (
       <DateComponent groupId={groupId} field={field} key={field.uuid}
-        collapse={collapse} readOnly={readOnly} handleKeyValuesChange={handleKeyValuesChange} />
+        readOnly={readOnly} handleKeyValuesChange={handleKeyValuesChange} />
     )
   },
   {
@@ -39,9 +38,9 @@ const fieldsMetadata = [
     label: "Multiple choices",
     type: "MultiSelect",
     dataType: "Coded",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, readOnly) => (
       <MultiCodedComponent groupId={groupId} field={field} key={field.uuid}
-        collapse={collapse} readOnly={readOnly} />)
+        readOnly={readOnly} />)
   },
   {
     id: "singleCodedField",
@@ -49,9 +48,9 @@ const fieldsMetadata = [
     label: "Multiple choices",
     type: "SingleSelect",
     dataType: "Coded",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, readOnly) => (
       <SingleCodedComponent groupId={groupId} field={field} key={field.uuid}
-        collapse={collapse} readOnly={readOnly} />)
+        readOnly={readOnly} />)
   },
   {
     id: "numericField",
@@ -61,9 +60,9 @@ const fieldsMetadata = [
     iconContent: "#",
     label: "Number",
     dataType: "Numeric",
-    component: (groupId, field, collapse, readOnly) => (
+    component: (groupId, field, readOnly) => (
       <NumericComponent groupId={groupId} field={field} key={field.uuid}
-        collapse={collapse} readOnly={readOnly} />)
+        readOnly={readOnly} />)
   }
 ];
 

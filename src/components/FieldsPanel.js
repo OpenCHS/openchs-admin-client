@@ -46,14 +46,14 @@ class FieldsPanel extends Component {
         <div className="card-body">
           <div className="row list-group-horizontal list-unstyled">
             <div className="list-group-item">
-              <MenuItem
+              <MenuItem href="#0"
                 onClick={() => onClick("Group", this.props.groupId)}
               >
                 Group
             </MenuItem>
             </div>
             <div className="list-group-item" >
-              <MenuItem
+              <MenuItem href="#0"
                 onClick={() => onClick("Field", this.props.groupId)}
               >
                 Field

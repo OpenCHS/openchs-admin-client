@@ -59,6 +59,8 @@ class FormDetails extends Component {
       .then((form) => {
         _.forEach(form.formElementGroups, (group) => {
           group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
+          group.collapse = true;
+          group.formElements.forEach(fe => fe.collapse = true);
         });
         this.setState({ form: form });
         localStorage.setItem("currentForm", JSON.stringify(form));
@@ -117,30 +119,35 @@ class FormDetails extends Component {
 
     this.setState(
       produce(draft => {
+        draft.form.formElementGroups.forEach(feg => {
+          feg.collapse = true;
+          feg.formElements.forEach(fe => fe.collapse = true);
+        });
         if (field === 'Group') {
-          const newGroupId = "group_" + (this.state.form.formElementGroups.length + 1);
+          const newGroupId = "group_" + (draft.form.formElementGroups.length + 1);
           currentGroup = new FormElementGroupContract(
             uuidv4(),
             newGroupId,
             "",
             groupDisplayOrder(draft.form),
             "",
-            []
+            [],
+            false
           );
           draft.form.formElementGroups.push(currentGroup);
-          draft.showFields = false;
+          draft.showFields = true;
         } else {
           const group = _.find(draft.form.formElementGroups, (g) => {
             return g.groupId === groupId;
           });
           const formElements = group.formElements;
-
           const newElement = new FormElementContract(
             uuidv4(),
             "",
             formElementDisplayOrder(group),
             { dataType: "", name: "" },
-            []
+            [],
+            false
           );
 
           formElements.push(newElement);
