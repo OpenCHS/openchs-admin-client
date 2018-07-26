@@ -119,10 +119,12 @@ class FormDetails extends Component {
 
     this.setState(
       produce(draft => {
+        //collapse all form elements and groups while adding a new field
         draft.form.formElementGroups.forEach(feg => {
           feg.collapse = true;
           feg.formElements.forEach(fe => fe.collapse = true);
         });
+        
         if (field === 'Group') {
           const newGroupId = "group_" + (draft.form.formElementGroups.length + 1);
           currentGroup = new FormElementGroupContract(
