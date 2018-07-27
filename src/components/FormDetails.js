@@ -290,9 +290,9 @@ class FormDetails extends Component {
     return (
       <div className="row">
         {this.renderForm()}
-        <div className="col-3">
+        {/* <div className="col-3">
           <UpdateForm form={this.state.form} />
-        </div>
+        </div> */}
       </div>
     );
   }

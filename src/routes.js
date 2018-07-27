@@ -9,6 +9,7 @@ import FormDetails from "./components/FormDetails";
 import NewConcept from './components/NewConcept';
 import Concept from './components/Concept';
 import DebugForms from './components/DebugForms';
+import { hot } from 'react-hot-loader'
 
 const Default = (props) => {
     return <App content={Dashboard} {...props}/>
@@ -34,7 +35,7 @@ const AddFields = (props) => {
     return <App content={FormDetails} breadcrumb={Breadcrumb} {...props}/>
 };
 
-export default function Routes(props) {
+function Routes(props) {
     return <Switch>
         <Route exact path="/" component={Default}/>
         <Route exact path="/forms" component={FormList}/>
@@ -45,3 +46,5 @@ export default function Routes(props) {
         <Route path="/debugforms" component={DebugForms} />
     </Switch>
 };
+
+export default hot(module)(Routes)
