@@ -91,7 +91,7 @@ class FormGroup extends Component {
         console.error("No field metadata found for " + (inputField.name + ", dataType " + inputField.dataType));
       } else {
         const readonly = true;
-        const fieldComponent = fieldMetadata.component(this.props.group.groupId, inputField, readonly, this.props.handleKeyValuesChange);
+        const fieldComponent = fieldMetadata.component(this.props.group.groupId, inputField, readonly, this.props.handleKeyValuesChange, this.props.handleFieldChange);
 
         inputFields.push(
           <div className="row" key={inputField.uuid}>

@@ -38,9 +38,9 @@ const fieldsMetadata = [
     label: "Multiple choices",
     type: "MultiSelect",
     dataType: "Coded",
-    component: (groupId, field, readOnly) => (
+    component: (groupId, field, readOnly, handleKeyValuesChange, handleFieldChange) => (
       <MultiCodedComponent groupId={groupId} field={field} key={field.uuid}
-        readOnly={readOnly} />)
+        readOnly={readOnly} handleFieldChange={handleFieldChange} />)
   },
   {
     id: "singleCodedField",
@@ -48,9 +48,9 @@ const fieldsMetadata = [
     label: "Multiple choices",
     type: "SingleSelect",
     dataType: "Coded",
-    component: (groupId, field, readOnly) => (
+    component: (groupId, field, readOnly, handleKeyValuesChange, handleFieldChange) => (
       <SingleCodedComponent groupId={groupId} field={field} key={field.uuid}
-        readOnly={readOnly} />)
+        readOnly={readOnly} handleFieldChange={handleFieldChange} />)
   },
   {
     id: "numericField",
