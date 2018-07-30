@@ -45,10 +45,6 @@ export default class ChooseConcept extends React.Component {
     this.props.onConceptSelected(suggestion);
   };
 
-  componentWillUnmount() {
-    console.log("unmouting");
-  }
-
   toggle = (event) => {
     this.setState({
       modal: !this.state.modal

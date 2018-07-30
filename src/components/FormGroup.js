@@ -96,7 +96,10 @@ class FormGroup extends Component {
         inputFields.push(
           <div className="row" key={inputField.uuid}>
             <div className="col-12">
-              <ConceptComponent field={inputField} handleFieldChange={this.props.handleFieldChange}>
+              <ConceptComponent 
+                field={inputField} 
+                handleFieldChange={this.props.handleFieldChange}
+                handleKeyValuesChange={this.props.handleKeyValuesChange}>
                 {fieldComponent}
               </ConceptComponent>
             </div>

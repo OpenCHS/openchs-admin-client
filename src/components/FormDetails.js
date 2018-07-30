@@ -124,7 +124,7 @@ class FormDetails extends Component {
           feg.collapse = true;
           feg.formElements.forEach(fe => fe.collapse = true);
         });
-        
+
         if (field === 'Group') {
           const newGroupId = "group_" + (draft.form.formElementGroups.length + 1);
           currentGroup = new FormElementGroupContract(
@@ -162,31 +162,43 @@ class FormDetails extends Component {
   }
 
   handleKeyValuesChange = (key, value, checked, field) => {
-
     this.setState(
       produce(draft => {
         for (const group of draft.form.formElementGroups) {
           for (const element of group.formElements) {
             if (element.uuid === field.uuid) {
-              let foundMatchingKeyValue = false;
-              for (const keyValue of element.keyValues) {
-                if (keyValue.key === key) {
-                  foundMatchingKeyValue = true;
-                  if (checked) {
-                    keyValue.value.push(value);
-                    keyValue.value = _.uniq(keyValue.value);
-                  } else {
-                    keyValue.value = keyValue.value.filter(v => v !== value);
+              if (key === "duration") {
+                let foundMatchingKeyValue = false;
+                for (const keyValue of element.keyValues) {
+                  if (keyValue.key === key) {
+                    foundMatchingKeyValue = true;
+                    if (checked) {
+                      keyValue.value.push(value);
+                      keyValue.value = _.uniq(keyValue.value);
+                    } else {
+                      keyValue.value = keyValue.value.filter(v => v !== value);
+                    }
+                    break;
                   }
-                  break;
                 }
-              }
-
-              if (!foundMatchingKeyValue) {
-                element.keyValues.push({
-                  "key": key,
-                  "value": checked ? [value] : []
-                });
+                if (!foundMatchingKeyValue) {
+                  element.keyValues.push({
+                    "key": key,
+                    "value": checked ? [value] : []
+                  });
+                }
+              } else if (key === "editable") {
+                let foundMatchingKeyValue = false;
+                for (const keyValue of element.keyValues) {
+                  if (keyValue.key === key) {
+                    foundMatchingKeyValue = true;
+                    keyValue.value = checked;
+                    break;
+                  }
+                }
+                if (!foundMatchingKeyValue) {
+                  element.keyValues.push({"key": key, "value": checked});
+                }
               }
             }
           }

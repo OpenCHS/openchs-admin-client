@@ -7,6 +7,15 @@ import { FormGroup, Label, Input, Collapse } from 'reactstrap';
 import config from '../../config';
 import ChooseConcept from '../ChooseConcept';
 
+function editable(field) {
+  for (const keyValue of field.keyValues) {
+    if(keyValue.key === "editable") {
+      return keyValue.value;
+    }
+  }
+  return false;
+}
+
 class ConceptComponent extends React.Component {
 
   constructor(props) {
@@ -21,7 +30,7 @@ class ConceptComponent extends React.Component {
   }
 
   render() {
-    const { field, handleFieldChange, children } = this.props;
+    const { field, handleFieldChange, handleKeyValuesChange, children } = this.props;
     const headerId = "heading_" + field.uuid;
 
     return (
@@ -69,6 +78,17 @@ class ConceptComponent extends React.Component {
                 onConceptSelected={(concept) => handleFieldChange('concept', concept, field.uuid)} />
 
               {children}
+
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    id={field.uuid + "_editable"}
+                    onChange={({ target }) => handleKeyValuesChange("editable", target.checked, target.checked, field)}
+                    checked={editable(this.props.field)} />
+                  Editable
+                </Label>
+              </FormGroup>
 
               <FormGroup check>
                 <Label check>
