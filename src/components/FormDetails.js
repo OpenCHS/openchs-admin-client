@@ -88,9 +88,8 @@ class FormDetails extends Component {
   }
 
   saveForm() {
-    const form = this.state.form;
-
-    const formToBeSaved = produce(form, draftState => {
+    
+    const formToBeSaved = produce(this.state.form, draftState => {
       for (const group of draftState.formElementGroups) {
         group.formElements = _.filter(group.formElements, e => e.name !== "" && e.concept.dataType !== "");
       }
@@ -198,6 +197,18 @@ class FormDetails extends Component {
                 }
                 if (!foundMatchingKeyValue) {
                   element.keyValues.push({"key": key, "value": checked});
+                }
+              } else if (key === "ExcludedAnswers") {
+                let foundMatchingKeyValue = false;
+                for (const keyValue of element.keyValues) {
+                  if (keyValue.key === key) {
+                    foundMatchingKeyValue = true;
+                    keyValue.value = _.uniq(value);
+                    break;
+                  }
+                }
+                if (!foundMatchingKeyValue) {
+                  element.keyValues.push({"key": key, "value": _.uniq(value)});
                 }
               }
             }
