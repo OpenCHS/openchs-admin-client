@@ -42,8 +42,8 @@ class CodedComponent extends Component {
 
   render() {
     const { field, handleFieldChange, handleKeyValuesChange } = this.props;
-    const tagsFieldId = this.props.field.uuid + "_tags";
-    const tags = _.map(this.props.field.concept.answers || this.props.field.concept.conceptAnswers, (answer) => (answer.name));
+    const tagsFieldId = field.uuid + "_tags";
+    const tags = _.map(field.concept.answers || field.concept.conceptAnswers, (answer) => (answer.name));
     const readOnly = this.props.readOnly;
     const tagsFieldLabel = readOnly ? "Answers" : "Type your choices. Press enter after each choice.";
 
