@@ -36,6 +36,7 @@ const AddFields = (props) => {
 };
 
 function Routes(props) {
+    //TODO: Remove debugforms route and related code of setting local state.
     return <Switch>
         <Route exact path="/" component={Default}/>
         <Route exact path="/forms" component={FormList}/>
