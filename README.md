@@ -1,7 +1,9 @@
 # openchs-admin-client
-UI application for management of reference and meta data
+UI application for management of reference and meta data.
 
-To check this out on local machine clone this repo and run:
+You will need `yarn` package mananger to be installed globally to run this project. Follow the instructions on https://yarnpkg.com/en/docs/install to install `yarn` if it is not already installed on your machine.
+
+To check this out on local machine, clone this repo and run:
 
 `npm install` or `yarn install`
 
