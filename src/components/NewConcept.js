@@ -5,6 +5,7 @@ import uuidv4 from 'uuid/v4';
 
 import handleErrors from '../lib/handleErrors';
 import config from '../config';
+import Breadcrumb from './Breadcrumb';
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;
@@ -132,128 +133,131 @@ class NewConcept extends React.Component {
     );
 
     return (
-      <div>
-        <Container>
-          <Row>
-            <Col sm={8}>
-              <form onSubmit={this.handleSubmit}>
-                <div className="form-group has-danger">
-                  <label htmlFor="name">Name</label>
-                  <input type="text"
-                    className="form-control form-control-danger"
-                    id="name"
-                    value={this.state.name}
-                    name="name"
-                    placeholder="Enter concept name"
-                    onChange={this.onChangeField}
-                    required />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="dataType">Concept Type</label>
-                  <select
-                    className="form-control"
-                    id="dataType"
-                    value={this.state.dataType}
-                    name="dataType"
-                    onChange={this.onChangeField}>
-                    <option>NA</option>
-                    {/* <option>Numeric</option>
-                    <option>Text</option> */}
-                    <option>Coded</option>
-                    {/* <option>Date</option> */}
-                  </select>
-                </div>
-                {this.state.dataType === 'Coded' &&
+      <div className="container">
+        <Breadcrumb location={this.props.location} />
+        <div>
+          <Container>
+            <Row>
+              <Col sm={8}>
+                <form onSubmit={this.handleSubmit}>
+                  <div className="form-group has-danger">
+                    <label htmlFor="name">Name</label>
+                    <input type="text"
+                      className="form-control form-control-danger"
+                      id="name"
+                      value={this.state.name}
+                      name="name"
+                      placeholder="Enter concept name"
+                      onChange={this.onChangeField}
+                      required />
+                  </div>
                   <div className="form-group">
-                    <label htmlFor="selectedAnswers">Selected Answers</label>
+                    <label htmlFor="dataType">Concept Type</label>
+                    <select
+                      className="form-control"
+                      id="dataType"
+                      value={this.state.dataType}
+                      name="dataType"
+                      onChange={this.onChangeField}>
+                      <option>NA</option>
+                      {/* <option>Numeric</option>
+                    <option>Text</option> */}
+                      <option>Coded</option>
+                      {/* <option>Date</option> */}
+                    </select>
+                  </div>
+                  {this.state.dataType === 'Coded' &&
+                    <div className="form-group">
+                      <label htmlFor="selectedAnswers">Selected Answers</label>
+                      <div className="form-row">
+                        <div className="col-10">
+                          <select
+                            className="form-control"
+                            id="selectedAnswers"
+                            multiple={true}
+                            name="selectedAnswers">
+                            {optionItems}
+                          </select>
+                        </div>
+                        <div className="col-1">
+                          <Button onClick={this.toggle} color="secondary">Add</Button>
+                          <Button color="secondary">Remove</Button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  {this.state.dataType === 'Numeric' &&
                     <div className="form-row">
-                      <div className="col-10">
-                        <select
-                          className="form-control"
-                          id="selectedAnswers"
-                          multiple={true}
-                          name="selectedAnswers">
-                          {optionItems}
+                      <div className="form-group col-md-2">
+                        <label htmlFor="lowAbsolute">Low Absolute</label>
+                        <input type="text" className="form-control" id="lowAbsolute"
+                        />
+                      </div>
+                      <div className="form-group col-md-2">
+                        <label htmlFor="highAbsolute">High Absolute</label>
+                        <input type="text" className="form-control" id="highAbsolute"
+                        />
+                      </div>
+                      <div className="form-group col-md-2">
+                        <label htmlFor="lowNormal">Low Normal</label>
+                        <input type="text" className="form-control" id="lowNormal"
+                        />
+                      </div>
+                      <div className="form-group col-md-2">
+                        <label htmlFor="highNormal">High Normal</label>
+                        <input type="text" className="form-control" id="highNormal"
+                        />
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label htmlFor="unit">Unit</label>
+                        <select id="unit" className="form-control"
+                        >
+                          <option defaultValue="">Choose...</option>
+                          <option>cm</option>
+                          <option>kg</option>
+                          <option>mm Hg</option>
+                          <option>g/dL</option>
+                          <option>beats/minute</option>
+                          <option>breaths/minute</option>
+                          <option>&#8451;</option>
+                          <option>&#8457;</option>
                         </select>
                       </div>
-                      <div className="col-1">
-                        <Button onClick={this.toggle} color="secondary">Add</Button>
-                        <Button color="secondary">Remove</Button>
-                      </div>
                     </div>
-                  </div>
-                }
-                {this.state.dataType === 'Numeric' &&
-                  <div className="form-row">
-                    <div className="form-group col-md-2">
-                      <label htmlFor="lowAbsolute">Low Absolute</label>
-                      <input type="text" className="form-control" id="lowAbsolute"
-                      />
-                    </div>
-                    <div className="form-group col-md-2">
-                      <label htmlFor="highAbsolute">High Absolute</label>
-                      <input type="text" className="form-control" id="highAbsolute"
-                      />
-                    </div>
-                    <div className="form-group col-md-2">
-                      <label htmlFor="lowNormal">Low Normal</label>
-                      <input type="text" className="form-control" id="lowNormal"
-                      />
-                    </div>
-                    <div className="form-group col-md-2">
-                      <label htmlFor="highNormal">High Normal</label>
-                      <input type="text" className="form-control" id="highNormal"
-                      />
-                    </div>
-                    <div className="form-group col-md-4">
-                      <label htmlFor="unit">Unit</label>
-                      <select id="unit" className="form-control"
-                      >
-                        <option defaultValue="">Choose...</option>
-                        <option>cm</option>
-                        <option>kg</option>
-                        <option>mm Hg</option>
-                        <option>g/dL</option>
-                        <option>beats/minute</option>
-                        <option>breaths/minute</option>
-                        <option>&#8451;</option>
-                        <option>&#8457;</option>
-                      </select>
-                    </div>
-                  </div>
-                }
-                <input
-                  className="btn btn-primary btn-block"
-                  type="submit"
-                  value="Create">
-                </input>
-              </form>
-              <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Choose an answer</ModalHeader>
-                <ModalBody>
-                  <form onSubmit={(e) => e.preventDefault()}>
-                    <FormGroup>
-                      <Label for="findConcept">Find Concept</Label>
-                      <Autosuggest
-                        id="findConcept"
-                        suggestions={suggestions}
-                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                        onSuggestionSelected={this.onSuggestionSelected}
-                        getSuggestionValue={getSuggestionValue}
-                        renderSuggestion={renderSuggestion}
-                        inputProps={inputProps} />
-                    </FormGroup>
-                  </form>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onClick={this.onAddSuggestion}>Add</Button>{' '}
-                  <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                </ModalFooter>
-              </Modal>
-            </Col>
-          </Row>
-        </Container>
+                  }
+                  <input
+                    className="btn btn-primary btn-block"
+                    type="submit"
+                    value="Create">
+                  </input>
+                </form>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                  <ModalHeader toggle={this.toggle}>Choose an answer</ModalHeader>
+                  <ModalBody>
+                    <form onSubmit={(e) => e.preventDefault()}>
+                      <FormGroup>
+                        <Label for="findConcept">Find Concept</Label>
+                        <Autosuggest
+                          id="findConcept"
+                          suggestions={suggestions}
+                          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                          onSuggestionSelected={this.onSuggestionSelected}
+                          getSuggestionValue={getSuggestionValue}
+                          renderSuggestion={renderSuggestion}
+                          inputProps={inputProps} />
+                      </FormGroup>
+                    </form>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="primary" onClick={this.onAddSuggestion}>Add</Button>{' '}
+                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                  </ModalFooter>
+                </Modal>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     );
   }

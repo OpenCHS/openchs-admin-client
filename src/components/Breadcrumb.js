@@ -4,8 +4,10 @@ import _ from 'lodash';
 
 const Breadcrumb = (props) => {
   const items = [];
+
   if (props.location !== undefined) {
     let fullPath = "";
+    const formName = props.location.state ? props.location.state.formName : null;
     const paths = _.split(props.location.pathname, '/');
     const lastPath = paths.pop();
     paths.forEach(path => {
@@ -14,14 +16,12 @@ const Breadcrumb = (props) => {
       items.push(<li className="breadcrumb-item" key={fullPath}><Link to={fullPath}>{(path)}</Link></li>);
     });
     fullPath = fullPath + '/' + lastPath;
-    items.push(<li className="breadcrumb-item active" key={fullPath}>{(lastPath)}</li>);
+    items.push(<li className="breadcrumb-item active" key={fullPath}>{formName ? formName : lastPath}</li>);
   }
   return (
-    <div className="container">
-      <ol className="breadcrumb">
-        {items}
-      </ol>
-    </div>
+    <ol className="breadcrumb">
+      {items}
+    </ol>
   );
 };
 

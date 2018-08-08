@@ -13,15 +13,16 @@ class FormCard extends Component {
   render() {
     const form = this.props.form;
     const duration = moment(form.lastModifiedDateTime).fromNow(true);
+    const linkProps = { pathname: `/forms/${form.uuid}`, state: { formName: form.name } }
 
     return <div className="col-md-3" key={form.uuid}>
       <div className="card h-100">
         <div className="card-body">
           <h4 className="card-title">
-            <Link className={config.orgClassName(form.organisationId)} to={`/forms/${form.uuid}`}>{form.name}</Link>
+            <Link className={config.orgClassName(form.organisationId)} to={linkProps}>{form.name}</Link>
           </h4>
           <h5>{form.formType}</h5>
-          <Link className="btn btn-primary" to={`/forms/${form.uuid}`}>Open</Link>
+          <Link className="btn btn-primary" to={linkProps}>Open</Link>
         </div>
         <div className="card-footer">
           <small className="text-muted">Last updated {duration} ago</small>

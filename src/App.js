@@ -6,10 +6,8 @@ const App = (props) => {
   const { header: Header, history, location, match, breadcrumb: Breadcrumb, content: Content } = props;
   return <div>
     {Header && <Header />}
-    {Breadcrumb && <Breadcrumb location={location} />}
-    <div className="container">
-      <Content history={history} match={match} />
-    </div>
+    <Content history={history} match={match} location={location} />
   </div>;
 };
+
 export default withRouter(App);

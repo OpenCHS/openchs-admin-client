@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FindConcept from './FindConcept';
 
-const Concepts = () =>
-  <React.Fragment>
+import Breadcrumb from './Breadcrumb';
+
+const Concepts = ({location}) =>
+  <div className="container">
+    <Breadcrumb location={location} />
     <div className="row">
       <div className="col">
         <nav className="navbar float-left">
@@ -19,5 +22,5 @@ const Concepts = () =>
         <FindConcept />
       </div>
     </div>
-  </React.Fragment>
+  </div>
 export default Concepts;

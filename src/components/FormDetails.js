@@ -11,6 +11,7 @@ import FieldsPanel from "./FieldsPanel";
 import config from '../config';
 import handleErrors from '../lib/handleErrors';
 import { FormElementContract, FormElementGroupContract } from '../contracts';
+import Breadcrumb from './Breadcrumb';
 
 const formElementDisplayOrder = (group) => {
   let displayOrder = 1;
@@ -311,10 +312,13 @@ class FormDetails extends Component {
 
   render() {
     return (
-      <div className="row">
-        {this.renderForm()}
-        <div className="col-3">
-          <UpdateForm form={this.state.form} />
+      <div className="container">
+        <Breadcrumb location={this.props.location} />
+        <div className="row">
+          {this.renderForm()}
+          <div className="col-3">
+            <UpdateForm form={this.state.form} />
+          </div>
         </div>
       </div>
     );

@@ -3,7 +3,6 @@ import App from "./App";
 import Dashboard from "./components/Dashboard";
 import Forms from "./components/Forms";
 import Concepts from "./components/Concepts";
-import Breadcrumb from "./components/Breadcrumb";
 import { Route, Switch } from 'react-router-dom';
 import FormDetails from "./components/FormDetails";
 import NewConcept from './components/NewConcept';
@@ -16,26 +15,26 @@ const Default = (props) => {
 };
 
 const FormList = (props) => {
-  return <App content={Forms} breadcrumb={Breadcrumb} {...props} />
+  return <App content={Forms} {...props} />
 };
 
 const ConceptsList = (props) => {
-  return <App content={Concepts} breadcrumb={Breadcrumb} {...props} />
+  return <App content={Concepts} {...props} />
 };
 
 const AddConcept = (props) => {
-  return <App content={NewConcept} breadcrumb={Breadcrumb} {...props} />
+  return <App content={NewConcept} {...props} />
 }
 
 const ViewConcept = (props) => {
-  return <App content={Concept} breadcrumb={Breadcrumb} {...props} />
+  return <App content={Concept} {...props} />
 }
 
 const AddFields = (props) => {
-  return <App content={FormDetails} breadcrumb={Breadcrumb} {...props} />
+  return <App content={FormDetails} {...props} />
 };
 
-function Routes(props) {
+function Routes() {
   //TODO: Remove debugforms route and related code of setting local state.
   return <Switch>
     <Route exact path="/" component={Default} />
