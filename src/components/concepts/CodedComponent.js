@@ -7,7 +7,7 @@ import { FormGroup, Label, Input } from 'reactstrap';
 const getExcludedAnswers = (field) => {
   let answers = [];
   for (const keyValue of field.keyValues) {
-    if(keyValue.key === "ExcludedAnswers") {
+    if (keyValue.key === "ExcludedAnswers") {
       answers = keyValue.value;
       break;
     }
