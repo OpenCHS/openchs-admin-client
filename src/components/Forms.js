@@ -13,6 +13,15 @@ class Forms extends Component {
   }
 
   componentDidMount() {
+    const signInUserSession = this.props.authData.signInUserSession;
+    let accessToken = null;
+    if (signInUserSession) {
+      accessToken = signInUserSession.accessToken.jwtToken;
+      console.log(`accessToken = ${accessToken}`);
+    } else {
+      console.log('signInUserSession is null');
+    }
+
     fetch("/forms",
       {
         method: 'GET',

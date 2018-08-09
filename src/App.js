@@ -3,10 +3,10 @@ import { withRouter } from "react-router-dom";
 import './App.css';
 
 const App = (props) => {
-  const { header: Header, history, location, match, breadcrumb: Breadcrumb, content: Content } = props;
+  const { header: Header, history, location, match, content: Content } = props;
   return <div>
     {Header && <Header />}
-    <Content history={history} match={match} location={location} />
+    <Content history={history} match={match} location={location} {...props} />
   </div>;
 };
 
