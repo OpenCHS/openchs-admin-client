@@ -1,16 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import registerServiceWorker from './registerServiceWorker';
-
-import 'jquery';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap';
-import Routes from "./routes";
+// import registerServiceWorker from './registerServiceWorker';
+import './index.css';
+import App from "./App";
 
 ReactDOM.render(
-  <Router>
-    <Routes />
-  </Router>, document.getElementById('root'));
+  <App />, 
+  document.getElementById('root'));
 
-registerServiceWorker();
+// registerServiceWorker();

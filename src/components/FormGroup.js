@@ -77,13 +77,11 @@ class FormGroup extends Component {
 
   renderFields() {
     const inputFields = [];
-    let i = 0;
     _.forEach(this.props.fields, (inputField) => {
       if (!inputField.concept) {
         console.error("Null concept for: " + inputField.name);
         console.error(" name, " + inputField.name + ", type: " + inputField.type);
       }
-      i++;
       const fieldMetadata = _.find(fieldsMetadata, (metadata) => {
         return inputField.concept && (metadata.dataType === inputField.concept.dataType);
       });

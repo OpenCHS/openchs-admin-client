@@ -2,9 +2,9 @@ import React from 'react';
 import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Autosuggest from 'react-autosuggest';
 import uuidv4 from 'uuid/v4';
+import axios from 'axios';
 
 import handleErrors from '../lib/handleErrors';
-import config from '../config';
 import Breadcrumb from './Breadcrumb';
 
 function getSuggestionValue(suggestion) {
@@ -57,18 +57,12 @@ class NewConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
-      .then(handleErrors)
-      .then(response => response.json())
-      .then(conceptAnswers =>
-        this.setState(prevState => (
-          {
-            suggestions: conceptAnswers
-          }
-        )))
-      .catch(err => {
-        console.log(err);
-      });
+    axios.get(`/search/concept?name=${value}`)
+    .then(response => response.data)
+    .then(conceptAnswers => this.setState({ suggestions: conceptAnswers }))
+    .catch(err => {
+      console.log(err);
+    });
   };
 
   onSuggestionsClearRequested = () => {
@@ -102,17 +96,10 @@ class NewConcept extends React.Component {
     //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
     alert(JSON.stringify(concepts));
 
-    fetch('/concepts', {
-      method: 'POST',
-      body: JSON.stringify(concepts),
-      headers: {
-        'Content-Type': 'application/json',
-        'ORGANISATION-NAME': config.orgName
-      }
-    }).then(handleErrors)
+    axios.post('/concepts', concepts)
       .then(response => alert('Concept Created'))
       .catch(err => {
-        alert(err)
+        console.log(err);
       });
 
     event.preventDefault();

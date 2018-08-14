@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TagsInput from 'react-tagsinput';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 class UpdateForm extends Component {
 
@@ -48,11 +48,11 @@ class UpdateForm extends Component {
       this.props.form.formType === "ProgramEnrolment";
     const form = this.props.form;
 
-    let last = {}; 
-    if(form.formElementGroups) {
-      last = _.last(form.formElementGroups)
-    }
-    const debugHelp = JSON.stringify(last, null, 2);
+    // let last = {}; 
+    // if(form.formElementGroups) {
+    //   last = _.last(form.formElementGroups)
+    // }
+    // const debugHelp = JSON.stringify(last, null, 2);
 
     return (
       <form>

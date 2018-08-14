@@ -1,13 +1,19 @@
-import React from 'react';
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import 'jquery';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap';
+import Routes from "./routes";
 import './App.css';
 
-const App = (props) => {
-  const { header: Header, history, location, match, content: Content } = props;
-  return <div>
-    {Header && <Header />}
-    <Content history={history} match={match} location={location} {...props} />
-  </div>;
-};
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
+    );
+  }
+}
 
-export default withRouter(App);
+export default App;

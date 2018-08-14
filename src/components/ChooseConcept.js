@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import config from '../config';
 
-import handleErrors from '../lib/handleErrors';
+import axios from 'axios';
 
 export default class ChooseConcept extends React.Component {
 
@@ -21,9 +20,8 @@ export default class ChooseConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    fetch(`/search/concept?name=${value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
-      .then(handleErrors)
-      .then(response => response.json())
+    axios.get(`/search/concept?name=${value}`)
+      .then(response => response.data)
       .then(concepts => this.setState({ suggestions: concepts }))
       .catch(err => {
         console.log(err);

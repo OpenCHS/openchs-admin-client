@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import produce from "immer";
 import uuidv4 from 'uuid/v4';
+import axios from 'axios';
 
 import FormGroup from "./FormGroup";
 import UpdateForm from "./UpdateForm";
 import FieldsPanel from "./FieldsPanel";
 
-import config from '../config';
-import handleErrors from '../lib/handleErrors';
 import { FormElementContract, FormElementGroupContract } from '../contracts';
 import Breadcrumb from './Breadcrumb';
 
@@ -41,22 +40,8 @@ class FormDetails extends Component {
   }
 
   componentDidMount() {
-    return fetch(`/forms/export?formUUID=${this.props.match.params.formUUID}`, {
-      credentials: 'include',
-      Accept: 'application/json',
-      headers: { "ORGANISATION-NAME": config.orgName }
-    })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          return response.json();
-        } else if (response.status === 401 || response.status === 403) {
-          window.location.pathname = '/';
-          return null;
-        }
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      })
+    return axios.get(`/forms/export?formUUID=${this.props.match.params.formUUID}`)
+      .then(response => response.data)
       .then((form) => {
         _.forEach(form.formElementGroups, (group) => {
           group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
@@ -64,7 +49,6 @@ class FormDetails extends Component {
           group.formElements.forEach(fe => fe.collapse = true);
         });
         this.setState({ form: form });
-        localStorage.setItem("currentForm", JSON.stringify(form));
       })
       .catch((error) => {
         console.log(error);
@@ -96,22 +80,13 @@ class FormDetails extends Component {
       }
     });
 
-    // form.name = "Mother Enrolment New";
-    // alert(JSON.stringify(form));
-    fetch("/forms", {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'ORGANISATION-NAME': config.orgName
-      },
-      body: JSON.stringify(formToBeSaved),
+    axios.post("/forms", formToBeSaved)
+    .then(response => {
+      console.log(response);
     })
-      .then(handleErrors)
-      .catch(err => {
-        alert(err);
-      });
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   onSelectField(field, groupId) {
@@ -156,7 +131,6 @@ class FormDetails extends Component {
           draft.showFields = false;
         }
 
-        localStorage.setItem("currentForm", JSON.stringify(draft.form));
       })
     );
   }
@@ -215,7 +189,6 @@ class FormDetails extends Component {
             }
           }
         }
-        localStorage.setItem("currentForm", JSON.stringify(draft.form));
       })
     );
   }
@@ -232,7 +205,6 @@ class FormDetails extends Component {
           }
         }
 
-        localStorage.setItem("currentForm", JSON.stringify(draft.form));
       })
     );
 
@@ -247,8 +219,6 @@ class FormDetails extends Component {
             break;
           }
         }
-
-        localStorage.setItem("currentForm", JSON.stringify(draft.form))
       })
     );
   }

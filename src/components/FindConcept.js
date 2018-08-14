@@ -2,8 +2,7 @@ import React from 'react';
 import { Container, Row, Input, ListGroup, ListGroupItem } from 'reactstrap'
 import { Link } from "react-router-dom";
 import handleErrors from '../lib/handleErrors';
-import config from '../config';
-
+import axios from 'axios';
 
 class FindConcept extends React.Component {
   constructor(props) {
@@ -19,9 +18,8 @@ class FindConcept extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    fetch(`/search/concept?name=${event.target.value}`, { headers: { "ORGANISATION-NAME": config.orgName } })
-      .then(handleErrors)
-      .then(response => response.json())
+    axios.get(`/search/concept?name=${event.target.value}`)
+      .then(response => response.data)
       .then(concepts => this.setState({ searchResults: concepts }))
       .catch(err => {
         console.log(err);

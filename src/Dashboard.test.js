@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {MemoryRouter} from 'react-router-dom';
-import App from './App';
 import Dashboard from './components/Dashboard';
 
 it('renders without crashing', () => {

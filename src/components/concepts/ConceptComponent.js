@@ -38,7 +38,7 @@ class ConceptComponent extends React.Component {
         <CardHeader className="py-2" id={headerId}>
           <Row>
             <Col sm="7">
-              <a className={config.orgClassName(field.organisationId)} href="#0" onClick={() => handleFieldChange('collapse', !field.collapse, field.uuid)}>
+              <a className={config.orgClassName(field.organisationId)} onClick={() => handleFieldChange('collapse', !field.collapse, field.uuid)}>
                 {field.name}
               </a>
             </Col>
