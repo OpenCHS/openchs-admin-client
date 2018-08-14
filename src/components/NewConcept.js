@@ -4,7 +4,6 @@ import Autosuggest from 'react-autosuggest';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
 
-import handleErrors from '../lib/handleErrors';
 import Breadcrumb from './Breadcrumb';
 
 function getSuggestionValue(suggestion) {

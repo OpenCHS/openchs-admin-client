@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Row, Input, ListGroup, ListGroupItem } from 'reactstrap'
 import { Link } from "react-router-dom";
-import handleErrors from '../lib/handleErrors';
 import axios from 'axios';
 
 class FindConcept extends React.Component {
