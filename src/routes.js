@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import Forms from "./components/Forms";
 import Concepts from "./components/Concepts";
 import config from './config';
+import {__DEV__} from './constants';
 
 class Routes extends Component {
   componentWillMount() {
@@ -76,7 +77,7 @@ class SecuredRoutes extends Component {
 
   componentDidMount() {
     console.log(`NODE_ENV ${process.env.NODE_ENV}`);
-    if (process.env.NODE_ENV !== "development") {
+    if (!__DEV__) {
       axios.defaults.baseURL = process.env.REACT_APP_API_URL;
       axios.get('/cognito-details')
         .then(response => response.data)
@@ -98,7 +99,7 @@ class SecuredRoutes extends Component {
   render() {
     if (this.state.cognitoDetailsLoaded) {
       const Authenticator = withAuthenticator(Routes);
-      return process.env.NODE_ENV === "development"
+      return __DEV__
         ? <Routes />
         : <Authenticator />;
     } else {
