@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
 // import { hot } from 'react-hot-loader'
-import Auth from '@aws-amplify/auth';
-import { withAuthenticator } from 'aws-amplify-react';
-import axios from 'axios';
+import Auth from "@aws-amplify/auth";
+import { withAuthenticator } from "aws-amplify-react";
+import axios from "axios";
 
 import Shell from "./Shell";
 import FormDetails from "./components/FormDetails";
-import NewConcept from './components/NewConcept';
-import Concept from './components/Concept';
+import NewConcept from "./components/NewConcept";
+import Concept from "./components/Concept";
 import Dashboard from "./components/Dashboard";
 import Forms from "./components/Forms";
 import Concepts from "./components/Concepts";
-import config from './config';
-import {__DEV__} from './constants';
+import config from "./config";
+import { __DEV__ } from "./constants";
 
 class Routes extends Component {
   componentWillMount() {
@@ -23,9 +23,9 @@ class Routes extends Component {
       let jwtToken = null;
       if (signInUserSession) {
         jwtToken = signInUserSession.idToken.jwtToken;
-        axios.defaults.headers.common['AUTH-TOKEN'] = jwtToken;
+        axios.defaults.headers.common["AUTH-TOKEN"] = jwtToken;
       } else {
-        console.log('signInUserSession is null');
+        console.log("signInUserSession is null");
       }
     }
   }
@@ -36,7 +36,7 @@ class Routes extends Component {
     };
 
     const FormList = () => {
-      console.log('init FormList');
+      console.log("init FormList");
       return <Shell content={Forms} />;
     };
 
@@ -46,24 +46,26 @@ class Routes extends Component {
 
     const AddConcept = () => {
       return <Shell content={NewConcept} />;
-    }
+    };
 
     const ViewConcept = () => {
       return <Shell content={Concept} />;
-    }
+    };
 
     const AddFields = () => {
       return <Shell content={FormDetails} />;
     };
 
-    return <Switch>
-      <Route exact path="/" component={Default} />
-      <Route exact path="/forms" component={FormList} />
-      <Route exact path="/concepts" component={ConceptsList} />
-      <Route path="/concepts/addConcept" component={AddConcept} />
-      <Route path="/concepts/:conceptId" component={ViewConcept} />
-      <Route path="/forms/:formUUID" component={AddFields} />
-    </Switch>
+    return (
+      <Switch>
+        <Route exact path="/" component={Default} />
+        <Route exact path="/forms" component={FormList} />
+        <Route exact path="/concepts" component={ConceptsList} />
+        <Route path="/concepts/addConcept" component={AddConcept} />
+        <Route path="/concepts/:conceptId" component={ViewConcept} />
+        <Route path="/forms/:formUUID" component={AddFields} />
+      </Switch>
+    );
   }
 }
 
@@ -79,19 +81,19 @@ class SecuredRoutes extends Component {
     console.log(`NODE_ENV ${process.env.NODE_ENV}`);
     if (!__DEV__) {
       axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-      axios.get('/cognito-details')
+      axios
+        .get("/cognito-details")
         .then(response => response.data)
         .then(data => {
           Auth.configure({
-            region: 'ap-south-1',
+            region: "ap-south-1",
             userPoolId: data.poolId, // Amazon Cognito User Pool ID
-            userPoolWebClientId: data.clientId, // Amazon Cognito Web Client ID
+            userPoolWebClientId: data.clientId // Amazon Cognito Web Client ID
           });
           this.setState({ cognitoDetailsLoaded: true });
         });
-    }
-    else {
-      axios.defaults.headers.common['ORGANISATION-NAME'] = config.orgName;
+    } else {
+      axios.defaults.headers.common["ORGANISATION-NAME"] = config.orgName;
       this.setState({ cognitoDetailsLoaded: true });
     }
   }
@@ -99,9 +101,7 @@ class SecuredRoutes extends Component {
   render() {
     if (this.state.cognitoDetailsLoaded) {
       const Authenticator = withAuthenticator(Routes);
-      return __DEV__
-        ? <Routes />
-        : <Authenticator />;
+      return __DEV__ ? <Routes /> : <Authenticator />;
     } else {
       return <div>Loading...</div>;
     }
