@@ -100,6 +100,17 @@ class SecuredRoutes extends Component {
       }
     } else {
       axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+      axios
+          .get("/cognito-details")
+          .then(response => response.data)
+          .then(data => {
+            Auth.configure({
+              region: "ap-south-1",
+              userPoolId: data.poolId, // Amazon Cognito User Pool ID
+              userPoolWebClientId: data.clientId // Amazon Cognito Web Client ID
+            });
+            this.setState({ cognitoDetailsLoaded: true });
+          });
     }
   }
 
