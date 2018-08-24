@@ -5,9 +5,13 @@ You will need `yarn` package mananger to be installed globally to run this proje
 
 To check this out on local machine, clone this repo and run:
 
-`npm install` or `yarn install`
+`yarn install`
 
-`npm start` or `yarn start`
+`yarn start`
+
+If you want to connect to prod, staging, or uat api from local machine then run
+
+`yarn start-prod` or `yarn start-staging` or `yarn start-uat` respectively.
 
 Also, you will have to start the server from adminui branch. To do this run:
 
@@ -17,4 +21,4 @@ Start the server after switching the branch:
 
 `make start_server`
 
-Go to localhost:3000 after this and click on Concepts to check concepts functionality.
+Go to localhost:3000 to see the UI.
