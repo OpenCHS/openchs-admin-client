@@ -30,7 +30,7 @@ class FormGroup extends Component {
         <div className="card-header py-2" id={headerId}>
           <Row>
             <Col sm="7">
-              <a className={config.orgClassName(group.organisationId)} href="#0" onClick={() => handleGroupChange('collapse', !group.collapse, group.uuid)}>
+              <a style={{cursor: "pointer"}} className={config.orgClassName(group.organisationId)} onClick={() => handleGroupChange('collapse', !group.collapse, group.uuid)}>
                 <strong>{formHeader}</strong>
               </a>
             </Col>
