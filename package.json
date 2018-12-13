@@ -28,7 +28,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "REACT_APP_API_URL=http://localhost:8021 react-app-rewired start",
+    "start": "REACT_APP_API_URL=http://localhost:5000 react-app-rewired start",
     "start-prod": "REACT_APP_API_URL=https://server.openchs.org react-app-rewired start",
     "start-staging": "REACT_APP_API_URL=https://staging.openchs.org react-app-rewired start",
     "start-uat": "REACT_APP_API_URL=https://uat.openchs.org react-app-rewired start",
@@ -40,7 +40,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject"
   },
-  "proxy": "http://localhost:8021",
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.1.0"
   }

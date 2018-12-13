@@ -17,7 +17,7 @@ class FindConcept extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    axios.get(`/search/concept?name=${event.target.value}`)
+    axios.get(`/chs-api/search/concept?name=${event.target.value}`)
       .then(response => response.data)
       .then(concepts => this.setState({ searchResults: concepts }))
       .catch(err => {

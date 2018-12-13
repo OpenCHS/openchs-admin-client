@@ -56,7 +56,7 @@ class NewConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    axios.get(`/search/concept?name=${value}`)
+    axios.get(`/chs-api/search/concept?name=${value}`)
     .then(response => response.data)
     .then(conceptAnswers => this.setState({ suggestions: conceptAnswers }))
     .catch(err => {
@@ -95,7 +95,7 @@ class NewConcept extends React.Component {
     //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
     alert(JSON.stringify(concepts));
 
-    axios.post('/concepts', concepts)
+    axios.post('/chs-api/concepts', concepts)
       .then(response => alert('Concept Created'))
       .catch(err => {
         console.log(err);

@@ -13,7 +13,7 @@ class Forms extends Component {
 
   componentDidMount() {
     console.log(`axios header in forms = ${JSON.stringify(axios.defaults.headers.common)}`);
-    axios.get("/forms")
+    axios.get("/chs-api/forms")
       .then((response) => {
         this.setState({ data: response.data, loading: false });
       })

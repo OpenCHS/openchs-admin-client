@@ -40,7 +40,7 @@ class FormDetails extends Component {
   }
 
   componentDidMount() {
-    return axios.get(`/forms/export?formUUID=${this.props.match.params.formUUID}`)
+    return axios.get(`/chs-api/forms/export?formUUID=${this.props.match.params.formUUID}`)
       .then(response => response.data)
       .then((form) => {
         _.forEach(form.formElementGroups, (group) => {
@@ -80,7 +80,7 @@ class FormDetails extends Component {
       }
     });
 
-    axios.post("/forms", formToBeSaved)
+    axios.post("/chs-api/forms", formToBeSaved)
     .then(response => {
       console.log(response);
     })

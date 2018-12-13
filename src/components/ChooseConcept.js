@@ -20,7 +20,7 @@ export default class ChooseConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    axios.get(`/search/concept?name=${value}`)
+    axios.get(`/chs-api/search/concept?name=${value}`)
       .then(response => response.data)
       .then(concepts => this.setState({ suggestions: concepts }))
       .catch(err => {
