@@ -3,6 +3,7 @@ import ProgramCard from './ProgramCard';
 import NewFormModal, { NewFormButton } from "./NewFormModal";
 import Breadcrumb from './Breadcrumb';
 import axios from 'axios';
+import {ChsApiRequest} from "../web/requests";
 
 class Forms extends Component {
   constructor(props) {
@@ -13,9 +14,9 @@ class Forms extends Component {
 
   componentDidMount() {
     console.log(`axios header in forms = ${JSON.stringify(axios.defaults.headers.common)}`);
-    axios.get("/chs-api/forms")
-      .then((response) => {
-        this.setState({ data: response.data, loading: false });
+    ChsApiRequest.get("forms")
+      .then((data) => {
+        this.setState({ data, loading: false });
       })
       .catch((error) => {
         this.setState({ loading: false });

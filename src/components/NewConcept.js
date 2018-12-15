@@ -5,6 +5,7 @@ import uuidv4 from 'uuid/v4';
 import axios from 'axios';
 
 import Breadcrumb from './Breadcrumb';
+import {ChsApiRequest} from "../web/requests";
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;
@@ -56,8 +57,7 @@ class NewConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    axios.get(`/chs-api/search/concept?name=${value}`)
-    .then(response => response.data)
+    ChsApiRequest.get('search/concept',{name:value})
     .then(conceptAnswers => this.setState({ suggestions: conceptAnswers }))
     .catch(err => {
       console.log(err);
@@ -95,7 +95,7 @@ class NewConcept extends React.Component {
     //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
     alert(JSON.stringify(concepts));
 
-    axios.post('/chs-api/concepts', concepts)
+    ChsApiRequest.post('concepts', concepts)
       .then(response => alert('Concept Created'))
       .catch(err => {
         console.log(err);

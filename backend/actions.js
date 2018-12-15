@@ -26,7 +26,7 @@ function takeActions(groupActionReq) {
 function takeAction(actionReq) {
     const action = actionToTake[actionReq.type];
     if (action) {
-        const data = settings.getImplementationFile(actionReq.implementation, actionReq.path);
+        const data = settings.getImplFileJson(actionReq.implementation, actionReq.path);
         const orgAdmin = settings.getImplementationOrgAdmin(actionReq.implementation);
         console.log(data,'fullpth');
         console.log(actionReq.implementation,'actionreq.impl');

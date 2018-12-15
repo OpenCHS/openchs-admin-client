@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Breadcrumb from './Breadcrumb';
-import axios from 'axios';
+import {AdminBackendRequest} from '../web/requests';
 import _ from 'lodash';
 
 const taskPrecedence = [
@@ -27,9 +27,9 @@ class Deployments extends Component {
     }
 
     componentDidMount() {
-        axios.get("/admin-backend/implementations/all")
-            .then((response) => {
-                this.setState({impls: response.data, loading: false});
+        AdminBackendRequest.get('implementations/all')
+            .then((impls) => {
+                this.setState({impls, loading: false});
             })
             .catch((error) => {
                 this.setState({error: error, loading: false});
@@ -81,19 +81,14 @@ class Deployments extends Component {
     }
 
     deploy(file, env) {
-        this.setState((state) => {
-            return {
-                ...state,
-                deploying: true
-            };
-        }, () => {
-            axios.post(`/admin-backend/implementations/do`, {
-                implementation: file.implementation,
-                type: file.type,
+        this.setState((state) => ({...state, deploying: true}), () => {
+            AdminBackendRequest.get(`implementations/${file.implementation}/file`, {
                 path: file.path,
             }).then((response) => {
+                console.log('response', response);
                 this.setState({deployment: {response}, deploying: false});
             }).catch((error) => {
+                console.log('got error');
                 this.setState({deployment: {error}, deploying: false});
             });
         });

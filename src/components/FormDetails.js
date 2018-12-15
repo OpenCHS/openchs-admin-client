@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import produce from "immer";
@@ -9,8 +9,9 @@ import FormGroup from "./FormGroup";
 import UpdateForm from "./UpdateForm";
 import FieldsPanel from "./FieldsPanel";
 
-import { FormElementContract, FormElementGroupContract } from '../contracts';
+import {FormElementContract, FormElementGroupContract} from '../contracts';
 import Breadcrumb from './Breadcrumb';
+import {ChsApiRequest} from "../web/requests";
 
 const formElementDisplayOrder = (group) => {
   let displayOrder = 1;
@@ -40,8 +41,7 @@ class FormDetails extends Component {
   }
 
   componentDidMount() {
-    return axios.get(`/chs-api/forms/export?formUUID=${this.props.match.params.formUUID}`)
-      .then(response => response.data)
+    return ChsApiRequest.get('forms/export', {formUUID: this.props.match.params.formUUID})
       .then((form) => {
         _.forEach(form.formElementGroups, (group) => {
           group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
@@ -80,7 +80,7 @@ class FormDetails extends Component {
       }
     });
 
-    axios.post("/chs-api/forms", formToBeSaved)
+    ChsApiRequest.post('forms', formToBeSaved)
     .then(response => {
       console.log(response);
     })

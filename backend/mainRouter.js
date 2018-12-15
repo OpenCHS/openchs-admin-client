@@ -20,4 +20,14 @@ router.post('/implementations/do', function (req, res, next) {
     });
 });
 
+router.get('/implementations/:implName/file', function (req, res, next) {
+    try {
+        const file = settings.getImplFile(req.params.implName, req.query.path);
+        res.send(file);
+    } catch (e) {
+        console.log('Fatal', e.message);
+        next(e);
+    }
+});
+
 module.exports = router;

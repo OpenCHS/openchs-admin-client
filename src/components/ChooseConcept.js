@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Label, FormGroup, Input, Col, Row, Modal, ModalHeader, ModalBody } from 'reactstrap';
-
-import axios from 'axios';
+import { ChsApiRequest } from '../web/requests';
 
 export default class ChooseConcept extends React.Component {
 
@@ -20,8 +19,7 @@ export default class ChooseConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    axios.get(`/chs-api/search/concept?name=${value}`)
-      .then(response => response.data)
+    ChsApiRequest.get('search/concept', {name: value})
       .then(concepts => this.setState({ suggestions: concepts }))
       .catch(err => {
         console.log(err);

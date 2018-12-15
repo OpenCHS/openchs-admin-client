@@ -15,17 +15,21 @@ function getJson(filepath) {
     return require(filepath);
 }
 
-function getImplementationFile(name, file) {
+function getImplFile(name, file) {
+    return readFileSync(path.join(rootDir, name, file));
+}
+
+function getImplFileJson(name, file) {
     return getJson(path.join(rootDir, name, file));
 }
 
 function getImplementationOrgAdmin(name) {
-    return getImplementationFile(name, 'impl.json')['organisation-admin-name'];
+    return getImplFileJson(name, 'impl.json')['organisation-admin-name'];
 }
 
 function getAll() {
     return settings().implementations.map((implDir) => {
-        const json = getImplementationFile(implDir, 'impl.json');
+        const json = getImplFileJson(implDir, 'impl.json');
         return {
             implementation: json['organisation-name'],
             definition: json
@@ -33,4 +37,4 @@ function getAll() {
     });
 }
 
-module.exports = {getAll, getImplementationFile, getImplementationOrgAdmin};
+module.exports = {getAll, getImplFileJson, getImplFile, getImplementationOrgAdmin};

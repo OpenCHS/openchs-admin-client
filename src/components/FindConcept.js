@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container, Row, Input, ListGroup, ListGroupItem } from 'reactstrap'
-import { Link } from "react-router-dom";
-import axios from 'axios';
+import {Container, Input, ListGroup, ListGroupItem, Row} from 'reactstrap'
+import {Link} from "react-router-dom";
+import {ChsApiRequest} from "../web/requests";
 
 class FindConcept extends React.Component {
   constructor(props) {
@@ -17,8 +17,7 @@ class FindConcept extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    axios.get(`/chs-api/search/concept?name=${event.target.value}`)
-      .then(response => response.data)
+    ChsApiRequest.get('search/concept', {name: event.target.value})
       .then(concepts => this.setState({ searchResults: concepts }))
       .catch(err => {
         console.log(err);
