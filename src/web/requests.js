@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 class ServerApiClient {
-    static defaults = {baseUrl: '', authToken: '', proxyPrefix: ''};
+    static defaults = {baseUrl: '', authToken: '', proxyPrefix: '', readUser: ''};
 
     static _headers(user) {
         return {
@@ -13,7 +13,7 @@ class ServerApiClient {
     static get(api, params, user) {
         return axios.get(`${ServerApiClient.defaults.proxyPrefix}/${api}`, {
             params,
-            headers: ServerApiClient._headers(user)
+            headers: ServerApiClient._headers(user || ServerApiClient.defaults.readUser)
         }).then(res => res.data);
     };
 

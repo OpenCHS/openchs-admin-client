@@ -25,6 +25,22 @@ const actionToTake = {
     // 'rules':[]
 };
 
+const precedence = [
+    'rules',
+    'users',
+    'checklist-details',
+    'form-additions',
+    'form-deletions',
+    'forms',
+    'concepts',
+    'operationalEncounterTypes',
+    'operationalPrograms',
+    'catchments',
+    'locations',
+    'admin-users',
+    'organisation-sql'
+];
+
 class DeployActions {
     static run(type, data, implementation) {
         const action = actionToTake[type];
@@ -35,5 +51,10 @@ class DeployActions {
         return {error: 'Action not defined'};
     }
 }
+DeployActions.Precedence = class {
+    static of(resourceType) {
+        return precedence.indexOf(resourceType);
+    }
+};
 
 export default DeployActions;

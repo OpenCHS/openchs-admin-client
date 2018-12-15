@@ -19,6 +19,12 @@ const Dashboard = () =>
             </Link>
             <p>Create new concepts</p>
           </Col>
+          <Col sm={4}>
+            <Link to="deployments">
+              <h3><i className="fa fa-rocket fa-3x"></i> Deployments</h3>
+            </Link>
+            <p>Deploy to local/stagin/prod</p>
+          </Col>
         </Row>
       </Grid>
     </div>

@@ -94,7 +94,8 @@ class SecuredRoutes extends Component {
       if (__USE_LOCALHOST_BACKEND__) {
         ServerApiClient.defaults.proxyPrefix = 'chs-api';
         AdminDaemonClient.defaults.proxyPrefix = 'admin-backend';
-        axios.defaults.headers.common["ORGANISATION-NAME"] = config.orgName;
+        ServerApiClient.defaults.readUser = config.orgName;
+        // axios.defaults.headers.common["USER-NAME"] = config.orgName;
         this.setState({ cognitoDetailsLoaded: true });
       } else {
         axios

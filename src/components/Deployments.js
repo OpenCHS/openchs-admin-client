@@ -4,22 +4,6 @@ import {AdminDaemonClient} from '../web/requests';
 import _ from 'lodash';
 import DeployActions from "../web/DeployActions";
 
-const taskPrecedence = [
-    'organisation-sql',
-    'admin-users',
-    'locations',
-    'catchments',
-    'operationalPrograms',
-    'operationalEncounterTypes',
-    'concepts',
-    'forms',
-    'form-deletions',
-    'form-additions',
-    'checklist-details',
-    'users',
-    'rules'
-];
-
 class Deployments extends Component {
     constructor(props) {
         super(props);
@@ -38,9 +22,8 @@ class Deployments extends Component {
     }
 
     groups(filesMap) {
-        return _.map(filesMap, (files, type) => ({files, type})).sort((a, b) => {
-            return taskPrecedence.indexOf(a.type) - taskPrecedence.indexOf(b.type);
-        });
+        return _.map(filesMap, (files, type) => ({files, type})).sort((a, b) =>
+            DeployActions.Precedence.of(b.type) - DeployActions.Precedence.of(a.type));
     }
 
     flatten(files, implementation) {
@@ -53,15 +36,39 @@ class Deployments extends Component {
         }, []);
     }
 
-    getTableRow(type, path, action1, action2, action3, key) {
+    getTableRow(file, key) {
+        const {type, path} = file;
         return (
-            <div style={styles.container} key={key}>
+            <li style={{...styles.rowContainer, lineHeight: '2em'}} key={key}
+                className="list-group-item list-group-item-action">
                 <div style={styles.fileType}>{type}</div>
                 <div style={styles.filePath}>{path}</div>
-                <div style={styles.action}>{action1}</div>
-                <div style={styles.action}>{action2}</div>
-                <div style={styles.action}>{action3}</div>
-            </div>
+                <div style={styles.deployment}>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'nowrap',
+                        marginLeft: '0.5em',
+                        justifyContent: 'space-between'
+                    }}>
+                        <button
+                            style={{...styles.deploymentButton}}
+                            onClick={() => this.deployDev(file)}
+                            disabled={this.state.deploying}
+                            className='btn btn-outline-secondary'>Dev
+                        </button>
+                        <button style={styles.deploymentButton}
+                                onClick={() => this.deployStaging(file)}
+                                disabled={this.state.deploying}
+                                className='btn btn-outline-secondary'>Staging
+                        </button>
+                        <button style={styles.deploymentButton}
+                                onClick={() => this.deployProd(file)}
+                                disabled={this.state.deploying}
+                                className='btn btn-outline-danger'>Prod
+                        </button>
+                    </div>
+                </div>
+            </li>
         );
     }
 
@@ -102,20 +109,21 @@ class Deployments extends Component {
             <Breadcrumb location={this.props.location}/>
             {this.state.impls.map((impl, idx) => {
                 return (
-                    <div key={idx}>
+                    <ul key={idx} className="list-group">
                         <h1>{impl.definition['organisation-name']}</h1>
-                        {this.getTableRow.apply(this, ['Type', 'File', 'Dev', 'Staging', 'Prod'].map(this.getTableHeader))}
-                        {this.flatten(impl.definition.files, impl.definition).map((file, idx) => {
-                            return this.getTableRow(file.type, file.path,
-                                <button onClick={() => this.deployDev(file)}
-                                        disabled={this.state.deploying}>Deploy</button>,
-                                <button onClick={() => this.deployStaging(file)}
-                                        disabled={this.state.deploying}>Deploy</button>,
-                                <button onClick={() => this.deployProd(file)}
-                                        disabled={this.state.deploying}>Deploy</button>,
-                                idx);
-                        })}
-                    </div>
+                        <li style={styles.rowContainer} className="list-group-item-dark">
+                            <div style={{...styles.fileType, margin: '4px 25px'}}>
+                                <h5 style={{fontWeight: 'bold'}}>Type</h5>
+                            </div>
+                            <div style={{...styles.filePath, margin: '4px 25px'}}>
+                                <h5 style={{fontWeight: 'bold'}}>File</h5>
+                            </div>
+                            <div style={{...styles.deployment, margin: '4px 25px'}}>
+                                <h5 style={{fontWeight: 'bold'}}>Deploy To</h5>
+                            </div>
+                        </li>
+                        {this.flatten(impl.definition.files, impl.definition).map((file, idx) => this.getTableRow(file, idx))}
+                    </ul>
                 );
             })}
 
@@ -126,8 +134,9 @@ class Deployments extends Component {
 export default Deployments;
 
 const styles = {
-    container: {display: 'flex', flexWrap: 'nowrap', border: '0.05em solid grey'},
+    rowContainer: {display: 'flex', flexWrap: 'nowrap', border: '0.05em solid grey'},
     cell: {
+        flex: 1,
         boxSizing: 'border-boxing',
         overflow: 'hidden',
         width: '100%',
@@ -139,3 +148,14 @@ const styles = {
 styles.fileType = {...styles.cell, flex: 7};
 styles.filePath = {...styles.cell, flex: 15};
 styles.action = {...styles.cell, flex: 3};
+styles.deployment = {
+    ...styles.cell,
+    flex: 9,
+};
+styles.deploymentButton = {
+    flex: 1,
+    boxSizing: 'border-boxing',
+    verticalAlign: 'center',
+    margin: '0px 6px',
+    padding: '0px 20px',
+};
