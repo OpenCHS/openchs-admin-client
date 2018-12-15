@@ -1,7 +1,7 @@
 import React from 'react';
 import {Container, Input, ListGroup, ListGroupItem, Row} from 'reactstrap'
 import {Link} from "react-router-dom";
-import {ChsApiRequest} from "../web/requests";
+import {ServerApiClient} from "../web/requests";
 
 class FindConcept extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class FindConcept extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    ChsApiRequest.get('search/concept', {name: event.target.value})
+    ServerApiClient.get('search/concept', {name: event.target.value})
       .then(concepts => this.setState({ searchResults: concepts }))
       .catch(err => {
         console.log(err);

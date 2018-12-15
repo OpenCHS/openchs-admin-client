@@ -11,7 +11,7 @@ import FieldsPanel from "./FieldsPanel";
 
 import {FormElementContract, FormElementGroupContract} from '../contracts';
 import Breadcrumb from './Breadcrumb';
-import {ChsApiRequest} from "../web/requests";
+import {ServerApiClient} from "../web/requests";
 
 const formElementDisplayOrder = (group) => {
   let displayOrder = 1;
@@ -41,7 +41,7 @@ class FormDetails extends Component {
   }
 
   componentDidMount() {
-    return ChsApiRequest.get('forms/export', {formUUID: this.props.match.params.formUUID})
+    return ServerApiClient.get('forms/export', {formUUID: this.props.match.params.formUUID})
       .then((form) => {
         _.forEach(form.formElementGroups, (group) => {
           group.groupId = (group.groupId || group.name).replace(/[^a-zA-Z0-9]/g, "_");
@@ -80,7 +80,7 @@ class FormDetails extends Component {
       }
     });
 
-    ChsApiRequest.post('forms', formToBeSaved)
+    ServerApiClient.post('forms', formToBeSaved)
     .then(response => {
       console.log(response);
     })

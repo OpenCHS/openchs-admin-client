@@ -11,14 +11,19 @@ var mainRouter = require('./mainRouter');
 var app = express();
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 serverRequests.defaults.baseUrl = 'http://localhost:8021';
 
-app.use('/chs-api', proxy({target: 'http://localhost:8021', changeOrigin: true, pathRewrite: {'^/chs-api': ''}}));
+app.use(proxy('/chs-api', {
+    target: 'http://localhost:8021',
+    pathRewrite: {'^/chs-api': ''},
+    followRedirects: true,
+    onProxyReq: function(proxyReq, req, res, next) {
+        proxyReq.setHeader('Content-Type','application/json');
+    }
+}));
 app.use('/admin-backend', mainRouter);
 
 // catch 404 and forward to error handler

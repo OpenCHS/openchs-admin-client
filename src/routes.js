@@ -15,7 +15,7 @@ import Concepts from "./components/Concepts";
 import config from "./config";
 import { __DEV__ } from "./constants";
 import Deployments from "./components/Deployments";
-import {ChsApiRequest, AdminBackendRequest} from "./web/requests";
+import {ServerApiClient, AdminDaemonClient} from "./web/requests";
 
 const __USE_LOCALHOST_BACKEND__ =
   process.env.REACT_APP_API_URL.indexOf("localhost") >= 0;
@@ -29,8 +29,8 @@ class Routes extends Component {
       if (signInUserSession) {
         jwtToken = signInUserSession.idToken.jwtToken;
         axios.defaults.headers.common["AUTH-TOKEN"] = jwtToken;
-        ChsApiRequest.defaults.authToken = jwtToken;
-        AdminBackendRequest.defaults.authToken = jwtToken;
+        ServerApiClient.defaults.authToken = jwtToken;
+        AdminDaemonClient.defaults.authToken = jwtToken;
       } else {
         console.log("signInUserSession is null");
       }
@@ -92,8 +92,8 @@ class SecuredRoutes extends Component {
   componentDidMount() {
     if (__DEV__) {
       if (__USE_LOCALHOST_BACKEND__) {
-        ChsApiRequest.defaults.proxyPrefix = 'chs-api';
-        AdminBackendRequest.defaults.proxyPrefix = 'admin-backend';
+        ServerApiClient.defaults.proxyPrefix = 'chs-api';
+        AdminDaemonClient.defaults.proxyPrefix = 'admin-backend';
         axios.defaults.headers.common["ORGANISATION-NAME"] = config.orgName;
         this.setState({ cognitoDetailsLoaded: true });
       } else {

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Breadcrumb from './Breadcrumb';
-import {AdminBackendRequest} from '../web/requests';
+import {AdminDaemonClient} from '../web/requests';
 import _ from 'lodash';
+import DeployActions from "../web/DeployActions";
 
 const taskPrecedence = [
     'organisation-sql',
@@ -27,7 +28,7 @@ class Deployments extends Component {
     }
 
     componentDidMount() {
-        AdminBackendRequest.get('implementations/all')
+        AdminDaemonClient.get('implementations/all')
             .then((impls) => {
                 this.setState({impls, loading: false});
             })
@@ -82,14 +83,16 @@ class Deployments extends Component {
 
     deploy(file, env) {
         this.setState((state) => ({...state, deploying: true}), () => {
-            AdminBackendRequest.get(`implementations/${file.implementation}/file`, {
+            AdminDaemonClient.get(`implementations/${file.implementation.name}/file`, {
                 path: file.path,
-            }).then((response) => {
-                console.log('response', response);
-                this.setState({deployment: {response}, deploying: false});
+            }).then((fileContent) => {
+                return DeployActions.run(file.type, JSON.stringify(fileContent), file.implementation);
+            }).then((success) => {
+                console.log('response', success);
+                this.setState({deployment: {success}, deploying: false});
             }).catch((error) => {
-                console.log('got error');
-                this.setState({deployment: {error}, deploying: false});
+                console.log('error', error.response);
+                this.setState({deployment: {error: error.reponse}, deploying: false});
             });
         });
     }
@@ -102,7 +105,7 @@ class Deployments extends Component {
                     <div key={idx}>
                         <h1>{impl.definition['organisation-name']}</h1>
                         {this.getTableRow.apply(this, ['Type', 'File', 'Dev', 'Staging', 'Prod'].map(this.getTableHeader))}
-                        {this.flatten(impl.definition.files, impl.definition['implementation-name']).map((file, idx) => {
+                        {this.flatten(impl.definition.files, impl.definition).map((file, idx) => {
                             return this.getTableRow(file.type, file.path,
                                 <button onClick={() => this.deployDev(file)}
                                         disabled={this.state.deploying}>Deploy</button>,

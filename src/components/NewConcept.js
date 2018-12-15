@@ -2,10 +2,9 @@ import React from 'react';
 import { Label, FormGroup, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import Autosuggest from 'react-autosuggest';
 import uuidv4 from 'uuid/v4';
-import axios from 'axios';
 
 import Breadcrumb from './Breadcrumb';
-import {ChsApiRequest} from "../web/requests";
+import {ServerApiClient} from "../web/requests";
 
 function getSuggestionValue(suggestion) {
   return suggestion.name;
@@ -57,7 +56,7 @@ class NewConcept extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    ChsApiRequest.get('search/concept',{name:value})
+    ServerApiClient.get('search/concept',{name:value})
     .then(conceptAnswers => this.setState({ suggestions: conceptAnswers }))
     .catch(err => {
       console.log(err);
@@ -95,7 +94,7 @@ class NewConcept extends React.Component {
     //alert(JSON.stringify(this.state.selectedAnswers.map((sA) => sA.name)));
     alert(JSON.stringify(concepts));
 
-    ChsApiRequest.post('concepts', concepts)
+    ServerApiClient.post('concepts', concepts)
       .then(response => alert('Concept Created'))
       .catch(err => {
         console.log(err);
