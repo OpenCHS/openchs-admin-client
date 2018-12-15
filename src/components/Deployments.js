@@ -93,7 +93,7 @@ class Deployments extends Component {
             AdminDaemonClient.get(`implementations/${file.implementation.name}/file`, {
                 path: file.path,
             }).then((fileContent) => {
-                return DeployActions.run(file.type, JSON.stringify(fileContent), file.implementation);
+                return DeployActions.run(file.type, fileContent, file.implementation);
             }).then((success) => {
                 console.log('response', success);
                 this.setState({deployment: {success}, deploying: false});

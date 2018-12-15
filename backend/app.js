@@ -17,9 +17,6 @@ app.use(proxy('/chs-api', {
     target: 'http://localhost:8021',
     pathRewrite: {'^/chs-api': ''},
     followRedirects: true,
-    onProxyReq: function(proxyReq, req, res, next) {
-        proxyReq.setHeader('Content-Type','application/json');
-    }
 }));
 app.use('/admin-backend', mainRouter);
 
