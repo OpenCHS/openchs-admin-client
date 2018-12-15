@@ -5,7 +5,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var serverRequests = require('./serverRequests');
 var mainRouter = require('./mainRouter');
 
 var app = express();
@@ -13,8 +12,6 @@ var app = express();
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-serverRequests.defaults.baseUrl = 'http://localhost:8021';
 
 app.use(proxy('/chs-api', {
     target: 'http://localhost:8021',

@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const rootDir = process.env.OPENCHS_IMPLEMENTATIONS_ROOT;
-const {lstatSync, readdirSync, readFileSync} = require('fs');
-const {join} = require('path');
+const {readFileSync} = require('fs');
 
 function settings() {
     return getJson(path.join(rootDir, '.openchs.json'));
