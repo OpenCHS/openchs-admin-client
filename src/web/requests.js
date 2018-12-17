@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 class ServerApiClient {
-    static defaults = {baseUrl: '', authToken: '', proxyPrefix: '', readUser: ''};
+    static defaults = {baseUrl: '', authToken: '', readUser: ''};
 
     static _headers(user) {
         return {
@@ -11,14 +11,14 @@ class ServerApiClient {
     };
 
     static get(api, params, user) {
-        return axios.get(`${ServerApiClient.defaults.proxyPrefix}/${api}`, {
+        return axios.get(`${api}`, {
             params,
             headers: ServerApiClient._headers(user || ServerApiClient.defaults.readUser)
         }).then(res => res.data);
     };
 
     static post(api, data, user, params) {
-        return axios.post(`${ServerApiClient.defaults.proxyPrefix}/${api}`, data, {
+        return axios.post(`${api}`, data, {
             params,
             headers: ServerApiClient._headers(user),
             responseType: 'text'
@@ -26,14 +26,14 @@ class ServerApiClient {
     };
 
     static patch(api, data, user, params) {
-        return axios.patch(`${ServerApiClient.defaults.proxyPrefix}/${api}`, data, {
+        return axios.patch(`${api}`, data, {
             params,
             headers: ServerApiClient._headers(user)
         }).then(res => res.data);
     };
 
     static delete(api, data, user, params) {
-        return axios.delete(`${ServerApiClient.defaults.proxyPrefix}/${api}`, {
+        return axios.delete(`${api}`, {
             data,
             params,
             headers: ServerApiClient._headers(user)

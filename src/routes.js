@@ -92,7 +92,6 @@ class SecuredRoutes extends Component {
   componentDidMount() {
     if (__DEV__) {
       if (__USE_LOCALHOST_BACKEND__) {
-        ServerApiClient.defaults.proxyPrefix = 'chs-api';
         AdminDaemonClient.defaults.proxyPrefix = 'admin-backend';
         ServerApiClient.defaults.readUser = config.orgName;
         // axios.defaults.headers.common["USER-NAME"] = config.orgName;

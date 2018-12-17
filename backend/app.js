@@ -13,12 +13,8 @@ app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(proxy('/chs-api', {
-    target: 'http://localhost:8021',
-    pathRewrite: {'^/chs-api': ''},
-    followRedirects: true,
-}));
 app.use('/admin-backend', mainRouter);
+app.use(proxy({ target: 'http://localhost:8021', followRedirects: true }));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
